@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Combat — Crown's Call</title>
+  <meta name="description" content="Combat in Crown's Call: vitals, attributes, stances, magic, and armor.">
+  <meta name="theme-color" content="#110e0b">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M5 23 L8 11 L12.5 16.5 L16 7 L19.5 16.5 L24 11 L27 23 Z" fill="#e7c98a"/>
+        <rect x="5" y="23" width="22" height="3" fill="#e25b3a"/>
+      </svg>
+      Crown's Call
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="bars" aria-hidden="true"></span>
+      <span class="sr">Menu</span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="game.html">The Game</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="wrap wiki-layout">
+      <nav class="wiki-nav" aria-label="Wiki">
+        <a href="wiki.html">Overview</a>
+        <a href="world.html">The World</a>
+        <a href="peoples.html">Peoples</a>
+        <a href="craft.html">Craft and Building</a>
+        <a href="combat.html" aria-current="page">Combat</a>
+      </nav>
+      <article class="prose">
+        <p class="eyebrow kicker">Wiki</p>
+        <h1>Combat</h1>
+        <p>You fight in person, with a weapon in either hand, inside a stance. Magic sits in the same fight as steel. Armor is worn piece by piece.</p>
+
+        <h2>Vitals</h2>
+        <ul class="stat-list">
+          <li><strong>Health</strong> How much harm you can take.</li>
+          <li><strong>Stamina</strong> The store you spend on effort.</li>
+          <li><strong>Mana</strong> The store you spend on magic.</li>
+        </ul>
+
+        <h2>Attributes</h2>
+        <p>Nine attributes sit under those vitals. Strength, Toughness, and Constitution. Agility, Dexterity, and Endurance. Intelligence, Wisdom, and Spirit. A people's starting spread is listed on the <a href="peoples.html">Peoples</a> page.</p>
+
+        <h2>Stances and hands</h2>
+        <p>A stance is a way of fighting. It holds the abilities you can use, including the chains for the left hand and the right. Changing stance changes which motions are available. Items held in the hands follow that stance.</p>
+
+        <h2>What you can wear</h2>
+        <p>Armor and jewelry occupy their own places on the body: head, neck, ears, shoulders, gloves, bracers, rings, torso, back, leggings, and boots. The two hands carry what you fight with.</p>
+
+        <div class="note">
+          <strong>Conditions.</strong> A body can also be slowed by the world around it. Cold, wet, and frozen are tracked states, along with stealth and other effects. Individual spells will get their own entries when their names and costs are fixed.
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Crown's Call is in development.</p>
+    <nav aria-label="Elsewhere">
+      <a href="https://davidkentdeveloper.com/">David Kent</a>
+      <a href="https://github.com/DavidKent-AppPrgm/crowns-call">Source</a>
+    </nav>
+  </footer>
+  <script src="site.js"></script>
+</body>
+</html>

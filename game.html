@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Game — Crown's Call</title>
+  <meta name="description" content="What a match of Crown's Call is: two teams of five, a resource-rich map, and a king to defeat.">
+  <meta name="theme-color" content="#110e0b">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M5 23 L8 11 L12.5 16.5 L16 7 L19.5 16.5 L24 11 L27 23 Z" fill="#e7c98a"/>
+        <rect x="5" y="23" width="22" height="3" fill="#e25b3a"/>
+      </svg>
+      Crown's Call
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="bars" aria-hidden="true"></span>
+      <span class="sr">Menu</span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="game.html" aria-current="page">The Game</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="wrap prose">
+      <p class="eyebrow kicker">The Game</p>
+      <h1>A war you supply yourself.</h1>
+      <p class="lede">Crown's Call is an online multiplayer game. You play on a team of five against another team of five. The map is rich with resources. You use them to craft, and you use what you craft to reach the other side's king.</p>
+
+      <h2>How a match is won</h2>
+      <p>The objective is direct. Eliminate the opposing team's king. Everything gathered on the map — wood, ore, plants, the buildings you raise — exists to make that possible and to keep the other team from doing it first.</p>
+
+      <h2>What you bring into the field</h2>
+      <p>Before the war, you make a character. You choose a people: Human, Elf, or Dwarf. You choose an allegiance: the Azure Accord or the Bloodbound. You shape a face, and you step into a body with health, stamina, and mana.</p>
+      <p>Those choices are the start of a character, not a locked class. Gear, stances, and what you craft change what that character can do once the match is underway.</p>
+
+      <div class="callout">
+        <strong>In development.</strong> There is no public release yet. The wiki describes the game as it currently plays in the build, and those details will move as the game does.
+      </div>
+
+      <h2>Where to read next</h2>
+      <div class="card-grid">
+        <a class="card" href="world.html">
+          <h3>The World</h3>
+          <p>Generated land, settlements, and the wild you strip for supplies.</p>
+          <span>Open</span>
+        </a>
+        <a class="card" href="combat.html">
+          <h3>Combat</h3>
+          <p>Vitals, attributes, stances, and the armor you wear.</p>
+          <span>Open</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Crown's Call is in development.</p>
+    <nav aria-label="Elsewhere">
+      <a href="https://davidkentdeveloper.com/">David Kent</a>
+      <a href="https://github.com/DavidKent-AppPrgm/crowns-call">Source</a>
+    </nav>
+  </footer>
+  <script src="site.js"></script>
+</body>
+</html>

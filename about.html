@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Crown's Call</title>
+  <meta name="description" content="Crown's Call is an independent game by David Kent. This site is its home and its wiki.">
+  <meta name="theme-color" content="#110e0b">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M5 23 L8 11 L12.5 16.5 L16 7 L19.5 16.5 L24 11 L27 23 Z" fill="#e7c98a"/>
+        <rect x="5" y="23" width="22" height="3" fill="#e25b3a"/>
+      </svg>
+      Crown's Call
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="bars" aria-hidden="true"></span>
+      <span class="sr">Menu</span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="game.html">The Game</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="about.html" aria-current="page">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="wrap prose">
+      <p class="eyebrow kicker">About</p>
+      <h1>One game. One name.</h1>
+      <p class="lede">Crown's Call is being made by David Kent, alone, in Unity. The game is the brand. This website is where that brand speaks, and where the wiki keeps the record.</p>
+
+      <h2>Two different sites</h2>
+      <p><a href="https://davidkentdeveloper.com/">davidkentdeveloper.com</a> is the portfolio of the person making the game. This site is for the game itself. News, rules, peoples, and systems belong here, under the Crown's Call name, even while one person is doing the work.</p>
+
+      <h2>How the site is built</h2>
+      <p>The pages are plain HTML and CSS, published with GitHub Pages from the <a href="https://github.com/DavidKent-AppPrgm/crowns-call">crowns-call</a> repository. A new wiki article is a new page that uses the same header, the same wiki list, and the same styles.</p>
+
+      <div class="note">
+        <strong>What comes next.</strong> Lore, a bestiary, item pages, and match rules can each be a new article beside World, Peoples, Craft, and Combat. The shell is already here.
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Crown's Call is in development.</p>
+    <nav aria-label="Elsewhere">
+      <a href="https://davidkentdeveloper.com/">David Kent</a>
+      <a href="https://github.com/DavidKent-AppPrgm/crowns-call">Source</a>
+    </nav>
+  </footer>
+  <script src="site.js"></script>
+</body>
+</html>

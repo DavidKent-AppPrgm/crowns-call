@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Craft and Building — Crown's Call</title>
+  <meta name="description" content="Gathering, quests, blueprints, and building in Crown's Call.">
+  <meta name="theme-color" content="#110e0b">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M5 23 L8 11 L12.5 16.5 L16 7 L19.5 16.5 L24 11 L27 23 Z" fill="#e7c98a"/>
+        <rect x="5" y="23" width="22" height="3" fill="#e25b3a"/>
+      </svg>
+      Crown's Call
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="bars" aria-hidden="true"></span>
+      <span class="sr">Menu</span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="game.html">The Game</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="wrap wiki-layout">
+      <nav class="wiki-nav" aria-label="Wiki">
+        <a href="wiki.html">Overview</a>
+        <a href="world.html">The World</a>
+        <a href="peoples.html">Peoples</a>
+        <a href="craft.html" aria-current="page">Craft and Building</a>
+        <a href="combat.html">Combat</a>
+      </nav>
+      <article class="prose">
+        <p class="eyebrow kicker">Wiki</p>
+        <h1>Craft and Building</h1>
+        <p>A team that only fights spends what it carried in. A team that gathers can make more. Materials come off the map. Blueprints turn a plan into a structure you place yourself.</p>
+
+        <h2>Getting Started</h2>
+        <p>A new character is offered this quest the first time they enter, and the offer stays until it is accepted. It can be abandoned later from the quest log.</p>
+        <div class="callout">
+          <p><strong>Getting Started.</strong> Welcome to the world. Collect 10 Wood.</p>
+          <p>Reward: 50 experience, and 1 Fort Blueprint.</p>
+        </div>
+
+        <h2>From the pack to the ground</h2>
+        <p>Items live in an inventory you carry. A blueprint is an item with a job: it places a building into the world. The Fort Blueprint is the first of these a new character is handed.</p>
+        <p>Work also happens at stations already in the world. A grindstone is one of them. More recipes will be listed here as they are settled in the build. This page will not invent a recipe that the game does not have.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Crown's Call is in development.</p>
+    <nav aria-label="Elsewhere">
+      <a href="https://davidkentdeveloper.com/">David Kent</a>
+      <a href="https://github.com/DavidKent-AppPrgm/crowns-call">Source</a>
+    </nav>
+  </footer>
+  <script src="site.js"></script>
+</body>
+</html>
