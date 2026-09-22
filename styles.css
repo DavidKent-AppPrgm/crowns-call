@@ -334,7 +334,7 @@ h3 {
 
 .wiki-layout {
   display: grid;
-  grid-template-columns: 14rem 1fr;
+  grid-template-columns: 14rem minmax(0, 1fr);
   gap: 2.5rem;
   padding-bottom: 4.5rem;
 }
@@ -362,6 +362,7 @@ h3 {
 .prose {
   padding-top: 2.5rem;
   max-width: 44rem;
+  min-width: 0;
 }
 
 .prose h2 {
@@ -469,6 +470,61 @@ th {
   letter-spacing: 0.04em;
 }
 
+.item-search-label {
+  display: block;
+  margin-top: 1.2rem;
+  color: var(--muted);
+}
+
+.item-search {
+  width: min(100%, 28rem);
+  margin-top: 0.35rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg-inset);
+  color: var(--text);
+  font: inherit;
+}
+
+.item-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.35rem 1rem;
+  margin-top: 1rem;
+}
+
+.item-list a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.item-list a:hover {
+  color: var(--gold);
+}
+
+.item-sheet {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  max-width: none;
+}
+
+.item-sheet h1 {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  overflow-wrap: anywhere;
+}
+
+.item-icon {
+  width: 8rem;
+  height: 8rem;
+  object-fit: contain;
+  background: var(--bg-inset);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
 :focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 3px;
@@ -483,8 +539,11 @@ th {
     grid-template-columns: 1fr;
   }
 
-  .name-index {
-    columns: 2;
+  .name-index,
+  .item-list,
+  .item-sheet {
+    columns: unset;
+    grid-template-columns: 1fr;
   }
 
   .wiki-nav {
