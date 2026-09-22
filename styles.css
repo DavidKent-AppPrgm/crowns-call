@@ -304,6 +304,12 @@ h3 {
   max-width: 42rem;
 }
 
+.band .record + .record {
+  margin-top: 2.6rem;
+  padding-top: 2.4rem;
+  border-top: 1px solid var(--line);
+}
+
 .record p:last-child {
   color: var(--muted);
 }
