@@ -448,6 +448,27 @@ th {
   gap: 1rem;
 }
 
+.name-index {
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+  columns: 3;
+  column-gap: 1.75rem;
+}
+
+.name-index li {
+  break-inside: avoid;
+  padding: 0.12rem 0;
+  color: var(--muted);
+}
+
+.library-note {
+  margin-top: 0.4rem;
+  color: var(--gold);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+
 :focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 3px;
@@ -460,6 +481,10 @@ th {
   .wiki-layout,
   .stat-list {
     grid-template-columns: 1fr;
+  }
+
+  .name-index {
+    columns: 2;
   }
 
   .wiki-nav {

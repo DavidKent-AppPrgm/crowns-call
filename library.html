@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wiki — Crown's Call</title>
-  <meta name="description" content="The Crown's Call wiki: the world, the peoples, crafting, and combat.">
+  <title>Library — Crown's Call</title>
+  <meta name="description" content="The Crown's Call library: flora, creatures, minerals, and the base, taken from the current project.">
   <meta name="theme-color" content="#110e0b">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,7 @@
     <nav class="site-nav" id="site-nav" aria-label="Primary">
       <a href="index.html">Home</a>
       <a href="game.html">The Game</a>
-      <a href="wiki.html" aria-current="page">Wiki</a>
+      <a href="wiki.html">Wiki</a>
       <a href="about.html">About</a>
     </nav>
   </header>
@@ -37,46 +37,45 @@
   <main id="main">
     <div class="wrap wiki-layout">
       <nav class="wiki-nav" aria-label="Wiki">
-        <a href="wiki.html" aria-current="page">Overview</a>
+        <a href="wiki.html">Overview</a>
         <a href="world.html">The World</a>
         <a href="peoples.html">Peoples</a>
-        <a href="library.html">Library</a>
+        <a href="library.html" aria-current="page">Library</a>
         <a href="craft.html">Craft and Building</a>
         <a href="combat.html">Combat</a>
       </nav>
       <article class="prose">
         <p class="eyebrow kicker">Wiki</p>
-        <h1>The record of the current build.</h1>
-        <p>These pages are the working wiki for Crown's Call. They describe the kingdom you grow, and the systems that are in the game now. When a system changes in the build, the page should change with it.</p>
-        <p>Player versus player is the part you can play today. Dungeons are planned and do not have an article yet, because they are not in the build.</p>
+        <h1>Library</h1>
+        <p>This is the first catalog of what is actually in the project. Each name is a library entry, often with several prefab variants. A later pass will decide which of them spawn in a generated world, and each kept name can then have its own page.</p>
+        <p class="library-note">Counts below are prefabs in that library, including variants.</p>
 
         <div class="card-grid">
-          <a class="card" href="world.html">
-            <h3>The World</h3>
-            <p>A standard generated world: relatively flat, and full of plants, trees, minerals, and animals.</p>
-            <span>Open</span>
+          <a class="card" href="flora.html">
+            <h3>Flora</h3>
+            <p>Five tree kinds, orchard fruits, and more than a hundred gathered plants, from wheat and grapes to mushrooms and water lilies.</p>
+            <span>Open the index</span>
           </a>
-          <a class="card" href="peoples.html">
-            <h3>Peoples</h3>
-            <p>The character you create, and the people, both of the world and other players, who fill a kingdom.</p>
-            <span>Open</span>
+          <a class="card" href="bestiary.html">
+            <h3>Creatures</h3>
+            <p>Mammals, birds, fish, and reptiles in the creature library, plus friendly and enemy people.</p>
+            <span>Open the index</span>
           </a>
-          <a class="card" href="craft.html">
-            <h3>Craft and Building</h3>
-            <p>Collecting from the land so the kingdom, your base, can grow.</p>
-            <span>Open</span>
+          <a class="card" href="minerals.html">
+            <h3>Minerals</h3>
+            <p>Coal, ice, obsidian, salt, sand, sulfur, gems, and ten metals from copper and iron through mythril.</p>
+            <span>Open the index</span>
           </a>
-          <a class="card" href="combat.html">
-            <h3>Combat</h3>
-            <p>The player-versus-player fighting that exists in the current build.</p>
-            <span>Open</span>
-          </a>
-          <a class="card" href="library.html">
-            <h3>Library</h3>
-            <p>The first index of flora, creatures, minerals, and the base, taken from the project itself.</p>
-            <span>Open</span>
+          <a class="card" href="kingdom.html">
+            <h3>The Base</h3>
+            <p>How a building sits on the terrain, the architectural sets, and the crafting trades that stock the kingdom.</p>
+            <span>Open the index</span>
           </a>
         </div>
+
+        <h2>How a world is laid down</h2>
+        <p>A character’s world is generated in layers. Each layer waits until the one before it has finished. The order is terrain, rocks, minerals, trees, plants, grass, loose items, and then the player. Plants, grass, and items look for open ground. Trees stay off of rocks and minerals. Near coasts, the slope of the shore is what keeps those layers from floating.</p>
+        <p>A player can keep up to five characters. Each character keeps their own world, and their own quest record.</p>
       </article>
     </div>
   </main>
