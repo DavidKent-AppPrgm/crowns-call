@@ -304,6 +304,27 @@ h3 {
   max-width: 42rem;
 }
 
+.record h2:not(:first-of-type) {
+  margin-top: 2.2rem;
+}
+
+.record + .card-grid:not(.thirds) {
+  margin-top: 1.25rem;
+}
+
+.button.is-disabled {
+  margin-top: 1rem;
+  background: transparent;
+  border-color: var(--line);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.download-choice {
+  max-width: 22rem;
+  margin-top: 1.75rem;
+}
+
 .band .record + .record {
   margin-top: 2.6rem;
   padding-top: 2.4rem;
