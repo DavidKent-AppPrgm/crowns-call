@@ -13,6 +13,21 @@
     6: { name: "Mythical", className: "rarity-mythical" }
   };
 
+  var MATERIALS = [
+    "Wood", "Ice", "Stone", "Copper", "Tin", "Bronze", "Tungsten", "Iron",
+    "Steel", "Darksteel", "Silver", "Gold", "Platinum", "Cobalt", "Titanium", "Mythril"
+  ];
+
+  var CRAFT_MARKERS = {
+    Metal: true, Cloth: true, Leather: true, Mail: true, Plate: true, Ingot: true,
+    Milled: true, Inscription: true, Weapon: true, Armor: true, Tool: true, Bag: true,
+    Linen: true, Wool: true, Cotton: true, Lace: true, Silk: true, Satin: true,
+    Denim: true, Polyester: true, Fleece: true
+  };
+  MATERIALS.forEach(function (material) { CRAFT_MARKERS[material] = true; });
+
+  var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
+
   fetch("data/items.json")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
@@ -31,18 +46,49 @@
     return RARITIES[value] || { name: "Rarity " + value, className: "" };
   }
 
-  function categorize(types) {
+  function typeSet(types) {
     var set = {};
     (types || []).forEach(function (type) { set[type] = true; });
+    return set;
+  }
+
+  function categorize(types) {
+    var set = typeSet(types);
     if (set.Weapon) return "weapons";
     if (set.Armor || set.Equippable) return "armor";
     if (set.Tool) return "tools";
-    if (set.Entree || set.Dessert || set.Cookie || set.Toast || set.Meats || set.Sauce) return "food";
     if (set.Consumable || set.Potion || set.Brew) return "consumables";
-    if (set.Metal || set.Wood || set.Cloth || set.Leather || set.Millable || set.Milled || set.Ingot || set.Gem) {
+    if (set.Metal || set.Wood || set.Cloth || set.Leather || set.Millable || set.Milled || set.Ingot || set.Gem || set.Stone) {
       return "materials";
     }
-    return "other";
+    for (var i = 0; i < MATERIALS.length; i++) {
+      if (set[MATERIALS[i]]) return "materials";
+    }
+    return "misc";
+  }
+
+  function isCraftable(types) {
+    var set = typeSet(types);
+    for (var key in CRAFT_MARKERS) {
+      if (set[key]) return true;
+    }
+    return false;
+  }
+
+  function isMagical(types) {
+    var set = typeSet(types);
+    for (var key in MAGIC_MARKERS) {
+      if (set[key]) return true;
+    }
+    return false;
+  }
+
+  function materialOf(types) {
+    var set = typeSet(types);
+    for (var i = 0; i < MATERIALS.length; i++) {
+      if (set[MATERIALS[i]]) return MATERIALS[i];
+    }
+    return "";
   }
 
   function renderList(items) {
@@ -52,13 +98,18 @@
     var categoryRoot = document.querySelector("[data-item-categories]");
     var rarityRoot = document.querySelector("[data-item-rarities]");
     var letterRoot = document.querySelector("[data-item-letters]");
+    var taxonomyRoot = document.querySelector("[data-item-taxonomy]");
     var category = "all";
     var rarity = "all";
     var letter = "all";
+    var craft = "all";
+    var damage = "all";
+    var material = "all";
     var nodes = [];
 
     items.forEach(function (item) {
       var info = rarityInfo(item.rarity);
+      var types = item.types || [];
       var link = document.createElement("a");
       link.href = "item.html?id=" + encodeURIComponent(item.id);
       link.textContent = item.name;
@@ -66,7 +117,10 @@
       link.title = info.name;
       link.dataset.name = item.name.toLowerCase();
       link.dataset.rarity = String(item.rarity);
-      link.dataset.category = categorize(item.types);
+      link.dataset.category = categorize(types);
+      link.dataset.craft = isCraftable(types) ? "craftable" : "uncraftable";
+      link.dataset.damage = isMagical(types) ? "magical" : "physical";
+      link.dataset.material = materialOf(types);
       link.dataset.letter = letterKey(item.name);
       link.dataset.sortName = item.name.toLowerCase();
       link.dataset.sortRarity = String(item.rarity);
@@ -98,7 +152,11 @@
         var button = event.target.closest("[data-category]");
         if (!button) return;
         category = button.dataset.category;
+        craft = "all";
+        damage = "all";
+        material = "all";
         setActive(categoryRoot, button);
+        renderTaxonomy();
         apply();
       });
     }
@@ -113,18 +171,127 @@
       });
     }
 
+    if (taxonomyRoot) {
+      taxonomyRoot.addEventListener("click", function (event) {
+        var button = event.target.closest("button[data-tax]");
+        if (!button) return;
+        var level = button.dataset.tax;
+        var value = button.dataset.value;
+        if (level === "craft") {
+          craft = value;
+          damage = "all";
+          material = "all";
+        } else if (level === "damage") {
+          damage = value;
+          material = "all";
+        } else if (level === "material") {
+          material = value;
+        }
+        renderTaxonomy();
+        apply();
+      });
+    }
+
     if (search) search.addEventListener("input", apply);
     if (sort) sort.addEventListener("change", apply);
+    renderTaxonomy();
     apply();
 
-    function apply() {
+    function baseVisible(node) {
       var query = search ? search.value.trim().toLowerCase() : "";
+      return (!query || node.dataset.name.indexOf(query) !== -1)
+        && (category === "all" || node.dataset.category === category)
+        && (rarity === "all" || node.dataset.rarity === rarity)
+        && (letter === "all" || node.dataset.letter === letter);
+    }
+
+    function taxVisible(node) {
+      return (craft === "all" || node.dataset.craft === craft)
+        && (damage === "all" || node.dataset.damage === damage)
+        && (material === "all" || node.dataset.material === material);
+    }
+
+    function renderTaxonomy() {
+      if (!taxonomyRoot) return;
+      taxonomyRoot.innerHTML = "";
+
+      appendTaxRow("Kingdom", "craft", [
+        { value: "all", label: "All" },
+        { value: "craftable", label: "Craftable" },
+        { value: "uncraftable", label: "Uncraftable" }
+      ], craft);
+
+      if (category === "weapons" && craft !== "all") {
+        appendTaxRow("Phylum", "damage", [
+          { value: "all", label: "All" },
+          { value: "physical", label: "Physical" },
+          { value: "magical", label: "Magical" }
+        ], damage);
+      }
+
+      if (category === "weapons" && craft !== "all" && damage === "physical") {
+        var materialOptions = [{ value: "all", label: "All materials" }].concat(
+          MATERIALS.map(function (name) { return { value: name, label: name }; })
+        );
+        appendTaxRow("Class", "material", materialOptions, material);
+      }
+
+      if (category === "armor" && craft !== "all") {
+        var armorMaterials = [{ value: "all", label: "All materials" }].concat(
+          MATERIALS.map(function (name) { return { value: name, label: name }; })
+        );
+        appendTaxRow("Class", "material", armorMaterials, material);
+      }
+    }
+
+    function appendTaxRow(label, level, options, activeValue) {
+      var row = document.createElement("div");
+      row.className = "item-tax-row";
+
+      var title = document.createElement("p");
+      title.className = "item-tax-label";
+      title.textContent = label;
+      row.appendChild(title);
+
+      var group = document.createElement("div");
+      group.className = "item-filters";
+      group.setAttribute("role", "group");
+      group.setAttribute("aria-label", label);
+
+      options.forEach(function (option) {
+        var available = option.value === "all" || nodes.some(function (node) {
+          if (!baseVisible(node)) return false;
+          if (level === "craft") return node.dataset.craft === option.value;
+          if (level === "damage") {
+            return (craft === "all" || node.dataset.craft === craft)
+              && node.dataset.damage === option.value;
+          }
+          if (level === "material") {
+            return (craft === "all" || node.dataset.craft === craft)
+              && (damage === "all" || node.dataset.damage === damage)
+              && node.dataset.material === option.value;
+          }
+          return false;
+        });
+        if (!available && option.value !== "all") return;
+
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "item-filter" + (option.value === activeValue ? " is-active" : "");
+        button.dataset.tax = level;
+        button.dataset.value = option.value;
+        button.textContent = option.label;
+        group.appendChild(button);
+      });
+
+      row.appendChild(group);
+      taxonomyRoot.appendChild(row);
+    }
+
+    function apply() {
       var mode = sort ? sort.value : "name";
       var shown = nodes.filter(function (node) {
-        var visible = (!query || node.dataset.name.indexOf(query) !== -1)
-          && (category === "all" || node.dataset.category === category)
-          && (rarity === "all" || node.dataset.rarity === rarity)
-          && (letter === "all" || node.dataset.letter === letter);
+        var visible = baseVisible(node) && taxVisible(node);
         node.hidden = !visible;
         return visible;
       });

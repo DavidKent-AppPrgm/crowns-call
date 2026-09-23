@@ -623,6 +623,99 @@ th {
   color: #e25b3a;
 }
 
+.item-rarities .item-filter {
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.item-rarities .rarity-any {
+  border-color: var(--line);
+  color: var(--muted);
+  background: transparent;
+}
+
+.item-rarities .item-filter.is-active {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px rgba(243, 236, 225, 0.55);
+  filter: brightness(1.08);
+  background: inherit;
+  color: inherit;
+  border-color: transparent;
+}
+
+.item-rarities .rarity-junk,
+.item-rarities .rarity-junk.is-active {
+  background: #6e6961;
+  color: #f3ece1;
+}
+
+.item-rarities .rarity-common,
+.item-rarities .rarity-common.is-active {
+  background: #f5f2ea;
+  color: #1a1612;
+}
+
+.item-rarities .rarity-uncommon,
+.item-rarities .rarity-uncommon.is-active {
+  background: #2f8a45;
+  color: #f3ece1;
+}
+
+.item-rarities .rarity-rare,
+.item-rarities .rarity-rare.is-active {
+  background: #2f6fc0;
+  color: #f3ece1;
+}
+
+.item-rarities .rarity-epic,
+.item-rarities .rarity-epic.is-active {
+  background: #7a3fcf;
+  color: #f3ece1;
+}
+
+.item-rarities .rarity-legendary,
+.item-rarities .rarity-legendary.is-active {
+  background: #c56e1d;
+  color: #1a1612;
+}
+
+.item-rarities .rarity-mythical,
+.item-rarities .rarity-mythical.is-active {
+  background: #c43b24;
+  color: #f3ece1;
+}
+
+.item-rarities .rarity-any.is-active {
+  border-color: var(--ember);
+  color: var(--text);
+  background: rgba(226, 91, 58, 0.12);
+  box-shadow: none;
+  filter: none;
+}
+
+.item-taxonomy {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.item-tax-row {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.item-tax-label {
+  margin: 0 0 0.45rem;
+  color: var(--gold);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.item-tax-row .item-filters {
+  margin-top: 0;
+}
+
 .item-filter.rarity-junk,
 .item-filter.rarity-common,
 .item-filter.rarity-uncommon,
