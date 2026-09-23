@@ -117,7 +117,7 @@
       link.dataset.category = categorize(types);
       link.dataset.craft = isCraftable(types) ? "craftable" : "uncraftable";
       link.dataset.damage = isMagical(types) ? "magical" : "physical";
-      link.dataset.material = materialOf(types);
+      link.dataset.material = materialOf(types, item.name);
       link.dataset.letter = letterKey(item.name);
       link.dataset.sortName = item.name.toLowerCase();
       nodes.push(link);
