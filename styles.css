@@ -300,6 +300,11 @@ h3 {
   border-top: 1px solid var(--line);
 }
 
+.band-start {
+  border-top: 0;
+  padding-top: 2.5rem;
+}
+
 .record {
   max-width: 42rem;
 }
