@@ -17,30 +17,129 @@
       target.textContent = "The item library did not load.";
     });
 
+  function categorize(types) {
+    var set = {};
+    (types || []).forEach(function (type) { set[type] = true; });
+    if (set.Weapon) return "weapons";
+    if (set.Armor || set.Equippable) return "armor";
+    if (set.Tool) return "tools";
+    if (set.Entree || set.Dessert || set.Cookie || set.Toast || set.Meats || set.Sauce) return "food";
+    if (set.Consumable || set.Potion || set.Brew) return "consumables";
+    if (set.Metal || set.Wood || set.Cloth || set.Leather || set.Millable || set.Milled || set.Ingot || set.Gem) {
+      return "materials";
+    }
+    return "other";
+  }
+
   function renderList(items) {
     var search = document.querySelector("[data-item-search]");
     var count = document.querySelector("[data-item-count]");
-    var nodes = items.map(function (item) {
+    var sort = document.querySelector("[data-item-sort]");
+    var categoryRoot = document.querySelector("[data-item-categories]");
+    var rarityRoot = document.querySelector("[data-item-rarities]");
+    var letterRoot = document.querySelector("[data-item-letters]");
+    var category = "all";
+    var rarity = "all";
+    var letter = "all";
+    var nodes = [];
+
+    items.forEach(function (item) {
       var link = document.createElement("a");
       link.href = "item.html?id=" + encodeURIComponent(item.id);
       link.textContent = item.name;
       link.dataset.name = item.name.toLowerCase();
-      return link;
+      link.dataset.rarity = String(item.rarity);
+      link.dataset.category = categorize(item.types);
+      link.dataset.letter = letterKey(item.name);
+      link.dataset.sortName = item.name.toLowerCase();
+      link.dataset.sortRarity = String(item.rarity);
+      nodes.push(link);
+      listRoot.appendChild(link);
     });
-    nodes.forEach(function (node) { listRoot.appendChild(node); });
+
+    if (letterRoot) {
+      var letters = ["all"].concat("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")).concat(["#"]);
+      letters.forEach(function (key) {
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "item-letter" + (key === "all" ? " is-active" : "");
+        button.dataset.letter = key;
+        button.textContent = key === "all" ? "All" : key;
+        letterRoot.appendChild(button);
+      });
+      letterRoot.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-letter]");
+        if (!button) return;
+        letter = button.dataset.letter;
+        setActive(letterRoot, button);
+        apply();
+      });
+    }
+
+    if (categoryRoot) {
+      categoryRoot.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-category]");
+        if (!button) return;
+        category = button.dataset.category;
+        setActive(categoryRoot, button);
+        apply();
+      });
+    }
+
+    if (rarityRoot) {
+      rarityRoot.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-rarity]");
+        if (!button) return;
+        rarity = button.dataset.rarity;
+        setActive(rarityRoot, button);
+        apply();
+      });
+    }
+
+    if (search) search.addEventListener("input", apply);
+    if (sort) sort.addEventListener("change", apply);
+    apply();
 
     function apply() {
       var query = search ? search.value.trim().toLowerCase() : "";
-      var shown = 0;
-      nodes.forEach(function (node) {
-        var visible = !query || node.dataset.name.indexOf(query) !== -1;
+      var mode = sort ? sort.value : "name";
+      var shown = nodes.filter(function (node) {
+        var visible = (!query || node.dataset.name.indexOf(query) !== -1)
+          && (category === "all" || node.dataset.category === category)
+          && (rarity === "all" || node.dataset.rarity === rarity)
+          && (letter === "all" || node.dataset.letter === letter);
         node.hidden = !visible;
-        if (visible) shown += 1;
+        return visible;
       });
-      if (count) count.textContent = shown + " of " + items.length;
+
+      shown.sort(function (a, b) {
+        if (mode === "rarity-desc") {
+          return Number(b.dataset.sortRarity) - Number(a.dataset.sortRarity)
+            || a.dataset.sortName.localeCompare(b.dataset.sortName);
+        }
+        if (mode === "rarity-asc") {
+          return Number(a.dataset.sortRarity) - Number(b.dataset.sortRarity)
+            || a.dataset.sortName.localeCompare(b.dataset.sortName);
+        }
+        return a.dataset.sortName.localeCompare(b.dataset.sortName);
+      });
+
+      shown.forEach(function (node) { listRoot.appendChild(node); });
+      if (count) {
+        count.textContent = shown.length + " of " + items.length + " items";
+      }
     }
-    if (search) search.addEventListener("input", apply);
-    apply();
+  }
+
+  function letterKey(name) {
+    var first = String(name || "").charAt(0).toUpperCase();
+    return first >= "A" && first <= "Z" ? first : "#";
+  }
+
+  function setActive(root, active) {
+    Array.prototype.forEach.call(root.querySelectorAll("button"), function (button) {
+      button.classList.toggle("is-active", button === active);
+    });
   }
 
   function renderSheet(items) {
@@ -82,7 +181,7 @@
     } else {
       html += "<p>This item has no listed stats in the current build.</p>";
     }
-    html += '<p><a href="all-items.html">All items</a></p></div>';
+    html += '<p><a href="all-items.html">Back to Items</a></p></div>';
     sheetRoot.innerHTML = html;
   }
 
