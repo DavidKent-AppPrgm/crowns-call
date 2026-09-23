@@ -645,17 +645,6 @@ th {
   color: inherit;
 }
 
-.item-list a.rarity-junk:hover,
-.item-list a.rarity-common:hover,
-.item-list a.rarity-uncommon:hover,
-.item-list a.rarity-rare:hover,
-.item-list a.rarity-epic:hover,
-.item-list a.rarity-legendary:hover,
-.item-list a.rarity-mythical:hover {
-  color: inherit;
-  filter: brightness(1.15);
-}
-
 .item-letters {
   display: flex;
   flex-wrap: wrap;
