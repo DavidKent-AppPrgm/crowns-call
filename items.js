@@ -18,6 +18,15 @@
     "Steel", "Darksteel", "Silver", "Gold", "Platinum", "Cobalt", "Titanium", "Mythril"
   ];
 
+  var CATEGORIES = [
+    { value: "weapons", label: "Weapons" },
+    { value: "armor", label: "Armor" },
+    { value: "tools", label: "Tools" },
+    { value: "consumables", label: "Consumables" },
+    { value: "materials", label: "Materials" },
+    { value: "misc", label: "Misc" }
+  ];
+
   var CRAFT_MARKERS = {
     Metal: true, Cloth: true, Leather: true, Mail: true, Plate: true, Ingot: true,
     Milled: true, Inscription: true, Weapon: true, Armor: true, Tool: true, Bag: true,
@@ -95,7 +104,6 @@
     var search = document.querySelector("[data-item-search]");
     var count = document.querySelector("[data-item-count]");
     var sort = document.querySelector("[data-item-sort]");
-    var categoryRoot = document.querySelector("[data-item-categories]");
     var rarityRoot = document.querySelector("[data-item-rarities]");
     var letterRoot = document.querySelector("[data-item-letters]");
     var taxonomyRoot = document.querySelector("[data-item-taxonomy]");
@@ -143,19 +151,6 @@
         if (!button) return;
         letter = button.dataset.letter;
         setActive(letterRoot, button);
-        apply();
-      });
-    }
-
-    if (categoryRoot) {
-      categoryRoot.addEventListener("click", function (event) {
-        var button = event.target.closest("[data-category]");
-        if (!button) return;
-        category = button.dataset.category;
-        craft = "all";
-        damage = "all";
-        material = "all";
-        setActive(categoryRoot, button);
         renderTaxonomy();
         apply();
       });
@@ -167,6 +162,7 @@
         if (!button) return;
         rarity = button.dataset.rarity;
         setActive(rarityRoot, button);
+        renderTaxonomy();
         apply();
       });
     }
@@ -179,6 +175,11 @@
         var value = button.dataset.value;
         if (level === "craft") {
           craft = value;
+          category = "all";
+          damage = "all";
+          material = "all";
+        } else if (level === "category") {
+          category = value;
           damage = "all";
           material = "all";
         } else if (level === "damage") {
@@ -192,7 +193,12 @@
       });
     }
 
-    if (search) search.addEventListener("input", apply);
+    if (search) {
+      search.addEventListener("input", function () {
+        renderTaxonomy();
+        apply();
+      });
+    }
     if (sort) sort.addEventListener("change", apply);
     renderTaxonomy();
     apply();
@@ -200,13 +206,13 @@
     function baseVisible(node) {
       var query = search ? search.value.trim().toLowerCase() : "";
       return (!query || node.dataset.name.indexOf(query) !== -1)
-        && (category === "all" || node.dataset.category === category)
         && (rarity === "all" || node.dataset.rarity === rarity)
         && (letter === "all" || node.dataset.letter === letter);
     }
 
     function taxVisible(node) {
       return (craft === "all" || node.dataset.craft === craft)
+        && (category === "all" || node.dataset.category === category)
         && (damage === "all" || node.dataset.damage === damage)
         && (material === "all" || node.dataset.material === material);
     }
@@ -215,59 +221,62 @@
       if (!taxonomyRoot) return;
       taxonomyRoot.innerHTML = "";
 
-      appendTaxRow("Kingdom", "craft", [
+      appendTaxRow("Craftable or uncraftable", "craft", [
         { value: "all", label: "All" },
         { value: "craftable", label: "Craftable" },
         { value: "uncraftable", label: "Uncraftable" }
       ], craft);
 
-      if (category === "weapons" && craft !== "all") {
-        appendTaxRow("Phylum", "damage", [
+      if (craft !== "all") {
+        appendTaxRow("Item type", "category", [{ value: "all", label: "All" }].concat(CATEGORIES), category);
+      }
+
+      if (craft !== "all" && category === "weapons") {
+        appendTaxRow("Weapon type", "damage", [
           { value: "all", label: "All" },
           { value: "physical", label: "Physical" },
           { value: "magical", label: "Magical" }
         ], damage);
       }
 
-      if (category === "weapons" && craft !== "all" && damage === "physical") {
-        var materialOptions = [{ value: "all", label: "All materials" }].concat(
+      if (craft !== "all" && category === "weapons" && damage === "physical") {
+        appendTaxRow("Material", "material", [{ value: "all", label: "All materials" }].concat(
           MATERIALS.map(function (name) { return { value: name, label: name }; })
-        );
-        appendTaxRow("Class", "material", materialOptions, material);
+        ), material);
       }
 
-      if (category === "armor" && craft !== "all") {
-        var armorMaterials = [{ value: "all", label: "All materials" }].concat(
+      if (craft !== "all" && category === "armor") {
+        appendTaxRow("Material", "material", [{ value: "all", label: "All materials" }].concat(
           MATERIALS.map(function (name) { return { value: name, label: name }; })
-        );
-        appendTaxRow("Class", "material", armorMaterials, material);
+        ), material);
       }
     }
 
-    function appendTaxRow(label, level, options, activeValue) {
+    function appendTaxRow(ariaLabel, level, options, activeValue) {
       var row = document.createElement("div");
       row.className = "item-tax-row";
-
-      var title = document.createElement("p");
-      title.className = "item-tax-label";
-      title.textContent = label;
-      row.appendChild(title);
 
       var group = document.createElement("div");
       group.className = "item-filters";
       group.setAttribute("role", "group");
-      group.setAttribute("aria-label", label);
+      group.setAttribute("aria-label", ariaLabel);
 
       options.forEach(function (option) {
         var available = option.value === "all" || nodes.some(function (node) {
           if (!baseVisible(node)) return false;
           if (level === "craft") return node.dataset.craft === option.value;
+          if (level === "category") {
+            return (craft === "all" || node.dataset.craft === craft)
+              && node.dataset.category === option.value;
+          }
           if (level === "damage") {
             return (craft === "all" || node.dataset.craft === craft)
+              && (category === "all" || node.dataset.category === category)
               && node.dataset.damage === option.value;
           }
           if (level === "material") {
             return (craft === "all" || node.dataset.craft === craft)
+              && (category === "all" || node.dataset.category === category)
               && (damage === "all" || node.dataset.damage === damage)
               && node.dataset.material === option.value;
           }
