@@ -79,10 +79,19 @@
     return false;
   }
 
-  function materialOf(types) {
+  function materialOf(types, name) {
+    var lower = String(name || "").toLowerCase();
+    var byLength = MATERIALS.slice().sort(function (a, b) { return b.length - a.length; });
+    for (var i = 0; i < byLength.length; i++) {
+      var material = byLength[i];
+      var key = material.toLowerCase();
+      if (lower === key || lower.indexOf(key + " ") === 0 || lower.indexOf(key + "-") === 0) {
+        return material;
+      }
+    }
     var set = typeSet(types);
-    for (var i = 0; i < MATERIALS.length; i++) {
-      if (set[MATERIALS[i]]) return MATERIALS[i];
+    for (var j = 0; j < MATERIALS.length; j++) {
+      if (set[MATERIALS[j]]) return MATERIALS[j];
     }
     return "";
   }
