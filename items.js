@@ -1,3 +1,4 @@
+/* norarity: item quality is per-drop, not catalog rarity */
 (function () {
   var listRoot = document.querySelector("[data-item-list]");
   var sheetRoot = document.querySelector("[data-item-sheet]");
