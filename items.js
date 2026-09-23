@@ -9,6 +9,25 @@
     "Steel", "Darksteel", "Silver", "Gold", "Platinum", "Cobalt", "Titanium", "Mythril"
   ];
 
+  var ARMOR_METALS = [
+    "Copper", "Tin", "Bronze", "Tungsten", "Iron", "Steel", "Darksteel",
+    "Silver", "Gold", "Platinum", "Cobalt", "Titanium", "Mythril"
+  ];
+
+  var CLOTH_FABRICS = [
+    "Linen", "Wool", "Cotton", "Lace", "Silk", "Satin", "Denim", "Polyester", "Fleece"
+  ];
+
+  var LEATHER_GRADES = ["Soft", "Light", "Medium", "Supple", "Sturdy", "Heavy"];
+
+  var ARMOR_FAMILIES = [
+    { value: "special", label: "Special" },
+    { value: "cloth", label: "Cloth" },
+    { value: "leather", label: "Leather" },
+    { value: "mail", label: "Mail" },
+    { value: "plate", label: "Plate" }
+  ];
+
   var CATEGORIES = [
     { value: "weapons", label: "Weapons" },
     { value: "armor", label: "Armor" },
@@ -96,6 +115,48 @@
     return "";
   }
 
+  function armorFamilyOf(types, name) {
+    var lower = String(name || "").toLowerCase();
+    if (lower.indexOf("bear ") === 0 || lower.indexOf("wolf ") === 0) return "special";
+    var set = typeSet(types);
+    if (set.Mail) return "mail";
+    if (set.Plate) return "plate";
+    if (set.Cloth) return "cloth";
+    if (set.Leather) return "leather";
+    return "";
+  }
+
+  function armorDetailOf(types, name, family) {
+    var set = typeSet(types);
+    var lower = String(name || "").toLowerCase();
+    if (family === "cloth") {
+      for (var i = 0; i < CLOTH_FABRICS.length; i++) {
+        var fabric = CLOTH_FABRICS[i];
+        if (set[fabric] || lower.indexOf(fabric.toLowerCase() + " ") === 0) return fabric;
+      }
+      return "";
+    }
+    if (family === "leather") {
+      for (var j = 0; j < LEATHER_GRADES.length; j++) {
+        var grade = LEATHER_GRADES[j];
+        if (new RegExp("\\b" + grade + "\\b", "i").test(name || "")) return grade;
+      }
+      return "";
+    }
+    if (family === "mail" || family === "plate") {
+      var byLength = ARMOR_METALS.slice().sort(function (a, b) { return b.length - a.length; });
+      for (var k = 0; k < byLength.length; k++) {
+        var metal = byLength[k];
+        var key = metal.toLowerCase();
+        if (lower.indexOf(key + " ") === 0 || lower.indexOf(key + "-") === 0 || set[metal]) {
+          return metal;
+        }
+      }
+      return "";
+    }
+    return "";
+  }
+
   function renderList(items) {
     var search = document.querySelector("[data-item-search]");
     var count = document.querySelector("[data-item-count]");
@@ -106,10 +167,13 @@
     var craft = "all";
     var damage = "all";
     var material = "all";
+    var armorFamily = "all";
+    var armorDetail = "all";
     var nodes = [];
 
     items.forEach(function (item) {
       var types = item.types || [];
+      var family = armorFamilyOf(types, item.name);
       var link = document.createElement("a");
       link.href = "item.html?id=" + encodeURIComponent(item.id);
       link.textContent = item.name;
@@ -118,6 +182,8 @@
       link.dataset.craft = isCraftable(types) ? "craftable" : "uncraftable";
       link.dataset.damage = isMagical(types) ? "magical" : "physical";
       link.dataset.material = materialOf(types, item.name);
+      link.dataset.armorFamily = family;
+      link.dataset.armorDetail = armorDetailOf(types, item.name, family);
       link.dataset.letter = letterKey(item.name);
       link.dataset.sortName = item.name.toLowerCase();
       nodes.push(link);
@@ -155,15 +221,24 @@
           category = "all";
           damage = "all";
           material = "all";
+          armorFamily = "all";
+          armorDetail = "all";
         } else if (level === "category") {
           category = value;
           damage = "all";
           material = "all";
+          armorFamily = "all";
+          armorDetail = "all";
         } else if (level === "damage") {
           damage = value;
           material = "all";
         } else if (level === "material") {
           material = value;
+        } else if (level === "armorFamily") {
+          armorFamily = value;
+          armorDetail = "all";
+        } else if (level === "armorDetail") {
+          armorDetail = value;
         }
         renderTaxonomy();
         apply();
@@ -189,7 +264,9 @@
       return (craft === "all" || node.dataset.craft === craft)
         && (category === "all" || node.dataset.category === category)
         && (damage === "all" || node.dataset.damage === damage)
-        && (material === "all" || node.dataset.material === material);
+        && (material === "all" || node.dataset.material === material)
+        && (armorFamily === "all" || node.dataset.armorFamily === armorFamily)
+        && (armorDetail === "all" || node.dataset.armorDetail === armorDetail);
     }
 
     function renderTaxonomy() {
@@ -221,9 +298,25 @@
       }
 
       if (craft !== "all" && category === "armor") {
-        appendTaxRow("Material", "material", [{ value: "all", label: "All materials" }].concat(
-          MATERIALS.map(function (name) { return { value: name, label: name }; })
-        ), material);
+        appendTaxRow("Armor type", "armorFamily", [{ value: "all", label: "All" }].concat(ARMOR_FAMILIES), armorFamily);
+      }
+
+      if (craft !== "all" && category === "armor" && armorFamily === "cloth") {
+        appendTaxRow("Cloth", "armorDetail", [{ value: "all", label: "All cloth" }].concat(
+          CLOTH_FABRICS.map(function (name) { return { value: name, label: name }; })
+        ), armorDetail);
+      }
+
+      if (craft !== "all" && category === "armor" && armorFamily === "leather") {
+        appendTaxRow("Leather", "armorDetail", [{ value: "all", label: "All leather" }].concat(
+          LEATHER_GRADES.map(function (name) { return { value: name, label: name }; })
+        ), armorDetail);
+      }
+
+      if (craft !== "all" && category === "armor" && (armorFamily === "mail" || armorFamily === "plate")) {
+        appendTaxRow("Metal", "armorDetail", [{ value: "all", label: "All metals" }].concat(
+          ARMOR_METALS.map(function (name) { return { value: name, label: name }; })
+        ), armorDetail);
       }
     }
 
@@ -254,6 +347,17 @@
               && (category === "all" || node.dataset.category === category)
               && (damage === "all" || node.dataset.damage === damage)
               && node.dataset.material === option.value;
+          }
+          if (level === "armorFamily") {
+            return (craft === "all" || node.dataset.craft === craft)
+              && (category === "all" || node.dataset.category === category)
+              && node.dataset.armorFamily === option.value;
+          }
+          if (level === "armorDetail") {
+            return (craft === "all" || node.dataset.craft === craft)
+              && (category === "all" || node.dataset.category === category)
+              && (armorFamily === "all" || node.dataset.armorFamily === armorFamily)
+              && node.dataset.armorDetail === option.value;
           }
           return false;
         });
