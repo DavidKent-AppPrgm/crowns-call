@@ -3,16 +3,6 @@
   var sheetRoot = document.querySelector("[data-item-sheet]");
   if (!listRoot && !sheetRoot) return;
 
-  var RARITIES = {
-    0: { name: "Junk", className: "rarity-junk" },
-    1: { name: "Common", className: "rarity-common" },
-    2: { name: "Uncommon", className: "rarity-uncommon" },
-    3: { name: "Rare", className: "rarity-rare" },
-    4: { name: "Epic", className: "rarity-epic" },
-    5: { name: "Legendary", className: "rarity-legendary" },
-    6: { name: "Mythical", className: "rarity-mythical" }
-  };
-
   var MATERIALS = [
     "Wood", "Ice", "Stone", "Copper", "Tin", "Bronze", "Tungsten", "Iron",
     "Steel", "Darksteel", "Silver", "Gold", "Platinum", "Cobalt", "Titanium", "Mythril"
@@ -50,10 +40,6 @@
       var target = listRoot || sheetRoot;
       target.textContent = "The item library did not load.";
     });
-
-  function rarityInfo(value) {
-    return RARITIES[value] || { name: "Rarity " + value, className: "" };
-  }
 
   function typeSet(types) {
     var set = {};
@@ -103,12 +89,9 @@
   function renderList(items) {
     var search = document.querySelector("[data-item-search]");
     var count = document.querySelector("[data-item-count]");
-    var sort = document.querySelector("[data-item-sort]");
-    var rarityRoot = document.querySelector("[data-item-rarities]");
     var letterRoot = document.querySelector("[data-item-letters]");
     var taxonomyRoot = document.querySelector("[data-item-taxonomy]");
     var category = "all";
-    var rarity = "all";
     var letter = "all";
     var craft = "all";
     var damage = "all";
@@ -116,22 +99,17 @@
     var nodes = [];
 
     items.forEach(function (item) {
-      var info = rarityInfo(item.rarity);
       var types = item.types || [];
       var link = document.createElement("a");
       link.href = "item.html?id=" + encodeURIComponent(item.id);
       link.textContent = item.name;
-      link.className = info.className;
-      link.title = info.name;
       link.dataset.name = item.name.toLowerCase();
-      link.dataset.rarity = String(item.rarity);
       link.dataset.category = categorize(types);
       link.dataset.craft = isCraftable(types) ? "craftable" : "uncraftable";
       link.dataset.damage = isMagical(types) ? "magical" : "physical";
       link.dataset.material = materialOf(types);
       link.dataset.letter = letterKey(item.name);
       link.dataset.sortName = item.name.toLowerCase();
-      link.dataset.sortRarity = String(item.rarity);
       nodes.push(link);
       listRoot.appendChild(link);
     });
@@ -151,17 +129,6 @@
         if (!button) return;
         letter = button.dataset.letter;
         setActive(letterRoot, button);
-        renderTaxonomy();
-        apply();
-      });
-    }
-
-    if (rarityRoot) {
-      rarityRoot.addEventListener("click", function (event) {
-        var button = event.target.closest("[data-rarity]");
-        if (!button) return;
-        rarity = button.dataset.rarity;
-        setActive(rarityRoot, button);
         renderTaxonomy();
         apply();
       });
@@ -199,14 +166,12 @@
         apply();
       });
     }
-    if (sort) sort.addEventListener("change", apply);
     renderTaxonomy();
     apply();
 
     function baseVisible(node) {
       var query = search ? search.value.trim().toLowerCase() : "";
       return (!query || node.dataset.name.indexOf(query) !== -1)
-        && (rarity === "all" || node.dataset.rarity === rarity)
         && (letter === "all" || node.dataset.letter === letter);
     }
 
@@ -298,7 +263,6 @@
     }
 
     function apply() {
-      var mode = sort ? sort.value : "name";
       var shown = nodes.filter(function (node) {
         var visible = baseVisible(node) && taxVisible(node);
         node.hidden = !visible;
@@ -306,14 +270,6 @@
       });
 
       shown.sort(function (a, b) {
-        if (mode === "rarity-desc") {
-          return Number(b.dataset.sortRarity) - Number(a.dataset.sortRarity)
-            || a.dataset.sortName.localeCompare(b.dataset.sortName);
-        }
-        if (mode === "rarity-asc") {
-          return Number(a.dataset.sortRarity) - Number(b.dataset.sortRarity)
-            || a.dataset.sortName.localeCompare(b.dataset.sortName);
-        }
         return a.dataset.sortName.localeCompare(b.dataset.sortName);
       });
 
@@ -349,7 +305,6 @@
       return;
     }
     document.title = item.name + " — Crown's Call";
-    var info = rarityInfo(item.rarity);
     var html = "";
     if (item.icon) {
       html += '<img class="item-icon" src="' + item.icon + '" alt="">';
@@ -358,9 +313,9 @@
     if (item.types && item.types.length) {
       html += "<p>" + item.types.map(escapeHtml).join(" · ") + "</p>";
     }
-    html += '<p><span class="' + info.className + '">' + escapeHtml(info.name) + "</span>";
-    if (item.width && item.height) html += " · " + item.width + " by " + item.height + " inventory";
-    html += "</p>";
+    if (item.width && item.height) {
+      html += "<p>" + item.width + " by " + item.height + " inventory</p>";
+    }
     if (item.slots && item.slots.length) {
       html += "<p>Worn in " + item.slots.map(escapeHtml).join(", ") + "</p>";
     }
