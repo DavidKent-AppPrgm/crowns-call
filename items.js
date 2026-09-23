@@ -80,8 +80,16 @@
       return response.json();
     })
     .then(function (items) {
-      if (listRoot) renderList(items);
-      if (sheetRoot) renderSheet(items);
+      return fetch("data/consumable-folders.json")
+        .then(function (response) {
+          if (!response.ok) return null;
+          return response.json();
+        })
+        .catch(function () { return null; })
+        .then(function (folders) {
+          if (listRoot) renderList(items, folders);
+          if (sheetRoot) renderSheet(items);
+        });
     })
     .catch(function () {
       var target = listRoot || sheetRoot;
@@ -101,8 +109,12 @@
     return false;
   }
 
-  function categorize(types) {
+  function categorize(types, name) {
     var set = typeSet(types);
+    var lower = String(name || "").toLowerCase();
+    if (set.Bag || /(^| )(bag|sack|pouch|quiver)$/.test(lower) || /(^| )(bag|sack|pouch|quiver) /.test(lower)) {
+      return "tools";
+    }
     if (set.Weapon || set.Bow || set.Crossbow || set.Arrow) return "weapons";
     if (set.Armor || set.Equippable) return "armor";
     if (set.Tool) return "tools";
@@ -133,6 +145,8 @@
 
   function toolKindOf(types, name) {
     var set = typeSet(types);
+    var lower = String(name || "").toLowerCase();
+    if (set.Bag || /(^| )(bag|sack|pouch|quiver)$/.test(lower)) return "bag";
     if (set.Pickaxe || /\bpickaxe\b/i.test(name || "")) return "pickaxe";
     if (/\bkey$/i.test(String(name || "").trim())) return "key";
     return "misc";
@@ -224,7 +238,26 @@
     return "";
   }
 
-  function renderList(items) {
+  function buildConsumableMaps(folders) {
+    var maps = { food: {}, potions: {}, foodGroups: [], potionGroups: [] };
+    if (!folders) return maps;
+    (folders.food || []).forEach(function (group) {
+      maps.foodGroups.push({ value: group.value, label: group.label });
+      (group.items || []).forEach(function (name) {
+        maps.food[String(name).toLowerCase()] = group.value;
+      });
+    });
+    (folders.potions || []).forEach(function (group) {
+      maps.potionGroups.push({ value: group.value, label: group.label });
+      (group.items || []).forEach(function (name) {
+        maps.potions[String(name).toLowerCase()] = group.value;
+      });
+    });
+    return maps;
+  }
+
+  function renderList(items, folders) {
+    var consumableMaps = buildConsumableMaps(folders);
     var search = document.querySelector("[data-item-search]");
     var count = document.querySelector("[data-item-count]");
     var letterRoot = document.querySelector("[data-item-letters]");
@@ -240,16 +273,39 @@
     var consumableBranch = "all";
     var consumableGroup = "all";
     var nodes = [];
+    var foodGroupOptions = consumableMaps.foodGroups.length
+      ? consumableMaps.foodGroups
+      : FOOD_GROUPS.map(function (group) { return { value: group.value, label: group.label }; });
+    var potionGroupOptions = consumableMaps.potionGroups.length
+      ? consumableMaps.potionGroups
+      : POTION_GROUPS.map(function (group) { return { value: group.value, label: group.label }; });
 
     items.forEach(function (item) {
       var types = item.types || [];
       var family = armorFamilyOf(types, item.name);
-      var branch = categorize(types) === "consumables" ? consumableBranchOf(types) : "";
+      var categoryValue = categorize(types, item.name);
+      var branch = "";
+      var groupValue = "";
+      if (categoryValue === "consumables") {
+        var key = String(item.name || "").toLowerCase();
+        if (consumableMaps.food[key]) {
+          branch = "food";
+          groupValue = consumableMaps.food[key];
+        } else if (consumableMaps.potions[key]) {
+          branch = "potions";
+          groupValue = consumableMaps.potions[key];
+        } else {
+          branch = consumableBranchOf(types);
+          groupValue = branch === "food"
+            ? groupMatch(FOOD_GROUPS, types) || (hasAny(typeSet(types), ["Millable", "Milled"]) ? "ingredients" : "")
+            : branch === "potions" ? groupMatch(POTION_GROUPS, types) : "";
+        }
+      }
       var link = document.createElement("a");
       link.href = "item.html?id=" + encodeURIComponent(item.id);
       link.textContent = item.name;
       link.dataset.name = item.name.toLowerCase();
-      link.dataset.category = categorize(types);
+      link.dataset.category = categoryValue;
       link.dataset.craft = isCraftable(types) ? "craftable" : "uncraftable";
       link.dataset.damage = weaponStyleOf(types);
       link.dataset.material = materialOf(types, item.name);
@@ -257,9 +313,7 @@
       link.dataset.armorDetail = armorDetailOf(types, item.name, family);
       link.dataset.toolKind = toolKindOf(types, item.name);
       link.dataset.consumableBranch = branch;
-      link.dataset.consumableGroup = branch === "food"
-        ? groupMatch(FOOD_GROUPS, types) || (hasAny(typeSet(types), ["Millable", "Milled"]) ? "ingredients" : "")
-        : branch === "potions" ? groupMatch(POTION_GROUPS, types) : "";
+      link.dataset.consumableGroup = groupValue;
       link.dataset.letter = letterKey(item.name);
       link.dataset.sortName = item.name.toLowerCase();
       nodes.push(link);
@@ -423,6 +477,7 @@
           { value: "all", label: "All" },
           { value: "pickaxe", label: "Pickaxe" },
           { value: "key", label: "Key" },
+          { value: "bag", label: "Bag" },
           { value: "misc", label: "Misc" }
         ], toolKind);
       }
@@ -436,15 +491,11 @@
       }
 
       if (craft !== "all" && category === "consumables" && consumableBranch === "food") {
-        appendTaxRow("Cooking", "consumableGroup", [{ value: "all", label: "All food" }].concat(
-          FOOD_GROUPS.map(function (group) { return { value: group.value, label: group.label }; })
-        ), consumableGroup);
+        appendTaxRow("Cooking", "consumableGroup", [{ value: "all", label: "All food" }].concat(foodGroupOptions), consumableGroup);
       }
 
       if (craft !== "all" && category === "consumables" && consumableBranch === "potions") {
-        appendTaxRow("Alchemy", "consumableGroup", [{ value: "all", label: "All potions" }].concat(
-          POTION_GROUPS.map(function (group) { return { value: group.value, label: group.label }; })
-        ), consumableGroup);
+        appendTaxRow("Alchemy", "consumableGroup", [{ value: "all", label: "All potions" }].concat(potionGroupOptions), consumableGroup);
       }
     }
 
