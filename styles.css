@@ -331,7 +331,7 @@ h3 {
   border-top: 1px solid var(--line);
 }
 
-.record p:last-child {
+.record p {
   color: var(--muted);
 }
 
