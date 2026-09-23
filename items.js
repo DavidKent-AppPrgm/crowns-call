@@ -3,6 +3,16 @@
   var sheetRoot = document.querySelector("[data-item-sheet]");
   if (!listRoot && !sheetRoot) return;
 
+  var RARITIES = {
+    0: { name: "Junk", className: "rarity-junk" },
+    1: { name: "Common", className: "rarity-common" },
+    2: { name: "Uncommon", className: "rarity-uncommon" },
+    3: { name: "Rare", className: "rarity-rare" },
+    4: { name: "Epic", className: "rarity-epic" },
+    5: { name: "Legendary", className: "rarity-legendary" },
+    6: { name: "Mythical", className: "rarity-mythical" }
+  };
+
   fetch("data/items.json")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
@@ -16,6 +26,10 @@
       var target = listRoot || sheetRoot;
       target.textContent = "The item library did not load.";
     });
+
+  function rarityInfo(value) {
+    return RARITIES[value] || { name: "Rarity " + value, className: "" };
+  }
 
   function categorize(types) {
     var set = {};
@@ -44,9 +58,12 @@
     var nodes = [];
 
     items.forEach(function (item) {
+      var info = rarityInfo(item.rarity);
       var link = document.createElement("a");
       link.href = "item.html?id=" + encodeURIComponent(item.id);
       link.textContent = item.name;
+      link.className = info.className;
+      link.title = info.name;
       link.dataset.name = item.name.toLowerCase();
       link.dataset.rarity = String(item.rarity);
       link.dataset.category = categorize(item.types);
@@ -156,6 +173,7 @@
       return;
     }
     document.title = item.name + " — Crown's Call";
+    var info = rarityInfo(item.rarity);
     var html = "";
     if (item.icon) {
       html += '<img class="item-icon" src="' + item.icon + '" alt="">';
@@ -164,7 +182,7 @@
     if (item.types && item.types.length) {
       html += "<p>" + item.types.map(escapeHtml).join(" · ") + "</p>";
     }
-    html += "<p>Rarity " + item.rarity;
+    html += '<p><span class="' + info.className + '">' + escapeHtml(info.name) + "</span>";
     if (item.width && item.height) html += " · " + item.width + " by " + item.height + " inventory";
     html += "</p>";
     if (item.slots && item.slots.length) {

@@ -595,6 +595,67 @@ th {
   background: rgba(226, 91, 58, 0.12);
 }
 
+.rarity-junk {
+  color: #9a948c;
+}
+
+.rarity-common {
+  color: #f5f2ea;
+}
+
+.rarity-uncommon {
+  color: #5fbf73;
+}
+
+.rarity-rare {
+  color: #4f8fe0;
+}
+
+.rarity-epic {
+  color: #b57bff;
+}
+
+.rarity-legendary {
+  color: #e8943a;
+}
+
+.rarity-mythical {
+  color: #e25b3a;
+}
+
+.item-filter.rarity-junk,
+.item-filter.rarity-common,
+.item-filter.rarity-uncommon,
+.item-filter.rarity-rare,
+.item-filter.rarity-epic,
+.item-filter.rarity-legendary,
+.item-filter.rarity-mythical {
+  border-color: currentColor;
+}
+
+.item-filter.rarity-junk.is-active,
+.item-filter.rarity-common.is-active,
+.item-filter.rarity-uncommon.is-active,
+.item-filter.rarity-rare.is-active,
+.item-filter.rarity-epic.is-active,
+.item-filter.rarity-legendary.is-active,
+.item-filter.rarity-mythical.is-active {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: currentColor;
+  color: inherit;
+}
+
+.item-list a.rarity-junk:hover,
+.item-list a.rarity-common:hover,
+.item-list a.rarity-uncommon:hover,
+.item-list a.rarity-rare:hover,
+.item-list a.rarity-epic:hover,
+.item-list a.rarity-legendary:hover,
+.item-list a.rarity-mythical:hover {
+  color: inherit;
+  filter: brightness(1.15);
+}
+
 .item-letters {
   display: flex;
   flex-wrap: wrap;
@@ -634,6 +695,25 @@ th {
 
 .item-list a:hover {
   color: var(--gold);
+}
+
+.item-list a.rarity-junk { color: #9a948c; }
+.item-list a.rarity-common { color: #f5f2ea; }
+.item-list a.rarity-uncommon { color: #5fbf73; }
+.item-list a.rarity-rare { color: #4f8fe0; }
+.item-list a.rarity-epic { color: #b57bff; }
+.item-list a.rarity-legendary { color: #e8943a; }
+.item-list a.rarity-mythical { color: #e25b3a; }
+
+.item-list a.rarity-junk:hover,
+.item-list a.rarity-common:hover,
+.item-list a.rarity-uncommon:hover,
+.item-list a.rarity-rare:hover,
+.item-list a.rarity-epic:hover,
+.item-list a.rarity-legendary:hover,
+.item-list a.rarity-mythical:hover {
+  color: inherit;
+  filter: brightness(1.15);
 }
 
 .item-sheet {
