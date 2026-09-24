@@ -283,10 +283,11 @@
   ];
 
   var BREW_GROUPS = [
+    { value: "juice", label: "Juice", types: ["Juice"] },
     { value: "tea", label: "Tea", types: ["Tea"] },
     { value: "coffee", label: "Coffee", types: ["Coffee"] },
     { value: "alcohol", label: "Alcohol", types: ["Alcohol", "Spirit"] },
-    { value: "mix-drinks", label: "Mix Drinks", types: ["Mixed", "Juice"] }
+    { value: "mix-drinks", label: "Mix Drinks", types: ["Mixed"] }
   ];
 
   var POTION_DETAILS = {
@@ -327,7 +328,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=gath1")
+  fetch("data/items.json?v=fix1")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -450,7 +451,6 @@
     if (/^Aguamiel$/i.test(trimmed)) return "jam";
     if (/ Jelly$/i.test(trimmed) || /^Jelly$/i.test(trimmed)) return "jelly";
     if (/ Paste$/i.test(trimmed) || /^Paste$/i.test(trimmed)) return "paste";
-    if (/^(Mashed Potatoes|Mashed Sweet Potato|Baba Ghanoush)$/i.test(trimmed)) return "paste";
     if (/ Syrup$/i.test(trimmed) || /^Syrup$/i.test(trimmed)) return "syrup";
     if (/^(Caramel|Grenadine)$/i.test(trimmed)) return "syrup";
     if (/ Hot Sauce$/i.test(trimmed) || /^Hot Sauce$/i.test(trimmed)) return "hot-sauce";
@@ -464,7 +464,7 @@
     if (set.Sauce || set.Oil || sauceKindOf(name)) return true;
     if (/^Guacamole$/i.test(trimmed)) return true;
     if (/^Yeast$/i.test(trimmed) || set.Yeast) return true;
-    if (/^(Mashed Potatoes|Mashed Sweet Potato|Baba Ghanoush|Aguamiel)$/i.test(trimmed)) return true;
+    if (/^(Mashed Peas|Mashed Potatoes|Mashed Sweet Potato|Baba Ghanoush|Aguamiel)$/i.test(trimmed)) return true;
     return false;
   }
 
@@ -501,10 +501,11 @@
 
   function brewGroupOf(types) {
     var set = typeSet(types);
+    if (set.Juice) return "juice";
     if (set.Tea) return "tea";
     if (set.Coffee) return "coffee";
     if (set.Alcohol || set.Spirit) return "alcohol";
-    if (set.Mixed || set.Juice) return "mix-drinks";
+    if (set.Mixed) return "mix-drinks";
     return "";
   }
 
@@ -593,8 +594,9 @@
     return "";
   }
 
-  function potionGroupOf(types) {
+  function potionGroupOf(types, name) {
     var set = typeSet(types);
+    if (/^Antidote$/i.test(String(name || "").trim())) return "immunities";
     if (set.Skin) return "protection";
     if (set.Attribute || set.Vial || set.Elixir || set.Potions || set.Flask) return "attribute";
     if (set.Magic || set.Mastery || set.Resist) return "magic";
@@ -774,7 +776,7 @@
             groupValue = foodGroupOf(types, item.name);
             detailValue = foodDetailOf(groupValue, types, item.name);
           } else if (branch === "potions") {
-            groupValue = potionGroupOf(types) || groupMatch(POTION_GROUPS, types);
+            groupValue = potionGroupOf(types, item.name) || groupMatch(POTION_GROUPS, types);
             detailValue = potionDetailOf(groupValue, types);
           } else if (branch === "brews") {
             groupValue = brewGroupOf(types) || groupMatch(BREW_GROUPS, types);
