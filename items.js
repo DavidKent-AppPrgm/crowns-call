@@ -39,14 +39,44 @@
   ];
 
   var FOOD_GROUPS = [
-    { value: "entrees", label: "Entrees", types: ["Entree", "Sushi", "Noodle", "Rice"] },
-    { value: "desserts", label: "Desserts", types: ["Dessert", "Cookie", "Pie", "Candy", "Popsicle", "Toast"] },
+    { value: "entrees", label: "Entrees", types: ["Entree", "Sushi", "Noodle", "Rice", "Soup", "Stew", "Toast"] },
+    { value: "desserts", label: "Desserts", types: ["Dessert", "Cookie", "Pie", "Candy", "Popsicle"] },
     { value: "meats", label: "Meats", types: ["Meats", "Meat", "Sausage", "Seafood", "Egg"] },
-    { value: "soups", label: "Soups", types: ["Soup", "Stew"] },
     { value: "sauces", label: "Sauces", types: ["Sauce"] },
-    { value: "dairy", label: "Breads & Dairy", types: ["Bread", "Cheese", "Milk"] },
+    { value: "breads", label: "Breads", types: ["Bread"] },
+    { value: "dairy", label: "Dairy", types: ["Cheese", "Milk"] },
     { value: "ingredients", label: "Ingredients", types: ["Millable", "Milled"] }
   ];
+
+  var FOOD_DETAILS = {
+    entrees: [
+      { value: "soup", label: "Soup" },
+      { value: "stew", label: "Stew" },
+      { value: "sushi", label: "Sushi" },
+      { value: "toast", label: "Toast" },
+      { value: "misc", label: "Misc" }
+    ],
+    desserts: [
+      { value: "candy", label: "Candy" },
+      { value: "cookie", label: "Cookie" },
+      { value: "pie", label: "Pie" },
+      { value: "popsicle", label: "Popsicle" },
+      { value: "misc", label: "Misc" }
+    ],
+    meats: [
+      { value: "cooked", label: "Cooked" },
+      { value: "raw", label: "Raw" },
+      { value: "misc", label: "Misc" }
+    ],
+    sauces: [
+      { value: "butter", label: "Butter" },
+      { value: "jam", label: "Jam" },
+      { value: "jelly", label: "Jelly" },
+      { value: "paste", label: "Paste" },
+      { value: "syrup", label: "Syrup" },
+      { value: "misc", label: "Misc" }
+    ]
+  };
 
   var POTION_GROUPS = [
     { value: "potions", label: "Potions", types: ["Potion", "Potions", "Flask", "Vial", "Elixir"] },
@@ -166,9 +196,25 @@
     return "misc";
   }
 
-  function consumableBranchOf(types) {
+  function sauceKindOf(name) {
+    var trimmed = String(name || "").trim();
+    if (/ Butter$/i.test(trimmed) || /^Butter$/i.test(trimmed)) return "butter";
+    if (/ Jam$/i.test(trimmed) || /^Jam$/i.test(trimmed)) return "jam";
+    if (/ Jelly$/i.test(trimmed) || /^Jelly$/i.test(trimmed)) return "jelly";
+    if (/ Paste$/i.test(trimmed) || /^Paste$/i.test(trimmed)) return "paste";
+    if (/ Syrup$/i.test(trimmed) || /^Syrup$/i.test(trimmed)) return "syrup";
+    return "";
+  }
+
+  function isSauceItem(types, name) {
+    var set = typeSet(types);
+    return !!(set.Sauce || sauceKindOf(name));
+  }
+
+  function consumableBranchOf(types, name) {
     var set = typeSet(types);
     if (set.Splint || set.Bandage) return "misc";
+    if (isSauceItem(types, name)) return "food";
     var foodTypes = [];
     FOOD_GROUPS.forEach(function (group) { foodTypes = foodTypes.concat(group.types); });
     var potionTypes = [];
@@ -188,6 +234,48 @@
     var set = typeSet(types);
     for (var i = 0; i < groups.length; i++) {
       if (hasAny(set, groups[i].types)) return groups[i].value;
+    }
+    return "";
+  }
+
+  function foodGroupOf(types, name) {
+    var set = typeSet(types);
+    if (isSauceItem(types, name)) return "sauces";
+    if (hasAny(set, ["Entree", "Sushi", "Noodle", "Rice", "Soup", "Stew", "Toast"])) return "entrees";
+    if (hasAny(set, ["Dessert", "Cookie", "Pie", "Candy", "Popsicle"])) return "desserts";
+    if (hasAny(set, ["Meats", "Meat", "Sausage", "Seafood", "Egg"])) return "meats";
+    if (set.Bread) return "breads";
+    if (set.Cheese || set.Milk) return "dairy";
+    if (set.Millable || set.Milled) return "ingredients";
+    return "";
+  }
+
+  function foodDetailOf(group, types, name) {
+    var set = typeSet(types);
+    if (group === "entrees") {
+      if (set.Soup) return "soup";
+      if (set.Stew) return "stew";
+      if (set.Sushi) return "sushi";
+      if (set.Toast) return "toast";
+      return "misc";
+    }
+    if (group === "desserts") {
+      if (set.Candy) return "candy";
+      if (set.Cookie) return "cookie";
+      if (set.Pie) return "pie";
+      if (set.Popsicle) return "popsicle";
+      return "misc";
+    }
+    if (group === "meats") {
+      if (/\bRaw\b/i.test(name || "")) return "raw";
+      if (/^(Cooked|Grilled|Roasted|Boiled|Fried|Deviled|Hard Boiled|Canned)\b/i.test(name || "")
+        || /\b(Bratwurst|Pepperoni|Steak|Ikayaki)\b/i.test(name || "")) {
+        return "cooked";
+      }
+      return "misc";
+    }
+    if (group === "sauces") {
+      return sauceKindOf(name) || "misc";
     }
     return "";
   }
@@ -286,6 +374,7 @@
     var toolKind = "all";
     var consumableBranch = "all";
     var consumableGroup = "all";
+    var consumableDetail = "all";
     var nodes = [];
     var foodGroupOptions = consumableMaps.foodGroups.length
       ? consumableMaps.foodGroups
@@ -300,6 +389,7 @@
       var categoryValue = categorize(types, item.name);
       var branch = "";
       var groupValue = "";
+      var detailValue = "";
       if (categoryValue === "consumables") {
         var key = String(item.name || "").toLowerCase();
         var set = typeSet(types);
@@ -309,14 +399,18 @@
         } else if (consumableMaps.food[key]) {
           branch = "food";
           groupValue = consumableMaps.food[key];
+          detailValue = foodDetailOf(groupValue, types, item.name);
         } else if (consumableMaps.potions[key]) {
           branch = "potions";
           groupValue = consumableMaps.potions[key];
         } else {
-          branch = consumableBranchOf(types);
-          groupValue = branch === "food"
-            ? groupMatch(FOOD_GROUPS, types) || (hasAny(typeSet(types), ["Millable", "Milled"]) ? "ingredients" : "")
-            : branch === "potions" ? groupMatch(POTION_GROUPS, types) : "";
+          branch = consumableBranchOf(types, item.name);
+          if (branch === "food") {
+            groupValue = foodGroupOf(types, item.name);
+            detailValue = foodDetailOf(groupValue, types, item.name);
+          } else if (branch === "potions") {
+            groupValue = groupMatch(POTION_GROUPS, types);
+          }
         }
       }
       var link = document.createElement("a");
@@ -332,6 +426,7 @@
       link.dataset.toolKind = toolKindOf(types, item.name);
       link.dataset.consumableBranch = branch;
       link.dataset.consumableGroup = groupValue;
+      link.dataset.consumableDetail = detailValue;
       link.dataset.letter = letterKey(item.name);
       link.dataset.sortName = item.name.toLowerCase();
       nodes.push(link);
@@ -374,6 +469,7 @@
           toolKind = "all";
           consumableBranch = "all";
           consumableGroup = "all";
+          consumableDetail = "all";
         } else if (level === "category") {
           category = value;
           damage = "all";
@@ -383,6 +479,7 @@
           toolKind = "all";
           consumableBranch = "all";
           consumableGroup = "all";
+          consumableDetail = "all";
         } else if (level === "damage") {
           damage = value;
           material = "all";
@@ -398,8 +495,12 @@
         } else if (level === "consumableBranch") {
           consumableBranch = value;
           consumableGroup = "all";
+          consumableDetail = "all";
         } else if (level === "consumableGroup") {
           consumableGroup = value;
+          consumableDetail = "all";
+        } else if (level === "consumableDetail") {
+          consumableDetail = value;
         }
         renderTaxonomy();
         apply();
@@ -430,7 +531,8 @@
         && (armorDetail === "all" || node.dataset.armorDetail === armorDetail)
         && (toolKind === "all" || node.dataset.toolKind === toolKind)
         && (consumableBranch === "all" || node.dataset.consumableBranch === consumableBranch)
-        && (consumableGroup === "all" || node.dataset.consumableGroup === consumableGroup);
+        && (consumableGroup === "all" || node.dataset.consumableGroup === consumableGroup)
+        && (consumableDetail === "all" || node.dataset.consumableDetail === consumableDetail);
     }
 
     function renderTaxonomy() {
@@ -513,6 +615,10 @@
         appendTaxRow("Cooking", "consumableGroup", [{ value: "all", label: "All food" }].concat(foodGroupOptions), consumableGroup);
       }
 
+      if (craft !== "all" && category === "consumables" && consumableBranch === "food" && FOOD_DETAILS[consumableGroup]) {
+        appendTaxRow("Food type", "consumableDetail", [{ value: "all", label: "All" }].concat(FOOD_DETAILS[consumableGroup]), consumableDetail);
+      }
+
       if (craft !== "all" && category === "consumables" && consumableBranch === "potions") {
         appendTaxRow("Alchemy", "consumableGroup", [{ value: "all", label: "All potions" }].concat(potionGroupOptions), consumableGroup);
       }
@@ -572,6 +678,13 @@
               && (category === "all" || node.dataset.category === category)
               && (consumableBranch === "all" || node.dataset.consumableBranch === consumableBranch)
               && node.dataset.consumableGroup === option.value;
+          }
+          if (level === "consumableDetail") {
+            return (craft === "all" || node.dataset.craft === craft)
+              && (category === "all" || node.dataset.category === category)
+              && (consumableBranch === "all" || node.dataset.consumableBranch === consumableBranch)
+              && (consumableGroup === "all" || node.dataset.consumableGroup === consumableGroup)
+              && node.dataset.consumableDetail === option.value;
           }
           return false;
         });
