@@ -58,14 +58,26 @@
     { value: "skins", label: "Skins", types: ["Skin"] },
     { value: "magics", label: "Magic", types: ["Magic"] },
     { value: "poisons", label: "Poisons", types: ["Poison", "Venom"] },
-    { value: "remedies", label: "Remedies", types: ["Bandage", "Splint", "Oil"] },
+    { value: "remedies", label: "Remedies", types: ["Bandage", "Oil"] },
     { value: "reagents", label: "Reagents", types: ["Pigment", "Inscription"] }
+  ];
+
+  var PREPARED_FOOD_TYPES = [
+    "Entree", "Sushi", "Noodle", "Rice", "Dessert", "Cookie", "Pie", "Candy", "Popsicle",
+    "Toast", "Meats", "Meat", "Sausage", "Seafood", "Egg", "Soup", "Stew", "Sauce",
+    "Bread", "Cheese", "Milk", "Milled"
+  ];
+
+  var PREPARED_POTION_TYPES = [
+    "Potion", "Potions", "Flask", "Vial", "Elixir", "Brew", "Juice", "Tea", "Coffee",
+    "Alcohol", "Spirit", "Attribute", "Mastery", "Resist", "Immunity", "Skin", "Magic",
+    "Poison", "Venom", "Bandage", "Oil", "Pigment", "Inscription"
   ];
 
   var CRAFT_MARKERS = {
     Metal: true, Cloth: true, Leather: true, Mail: true, Plate: true, Ingot: true,
     Milled: true, Inscription: true, Weapon: true, Armor: true, Tool: true, Bag: true,
-    Bow: true, Crossbow: true, Arrow: true,
+    Bow: true, Crossbow: true, Arrow: true, Splint: true,
     Linen: true, Wool: true, Cotton: true, Lace: true, Silk: true, Satin: true,
     Denim: true, Polyester: true, Fleece: true
   };
@@ -133,6 +145,8 @@
     for (var key in CRAFT_MARKERS) {
       if (set[key]) return true;
     }
+    // Prepared cooking and alchemy results are craftable; raw Millable gathers are not.
+    if (hasAny(set, PREPARED_FOOD_TYPES) || hasAny(set, PREPARED_POTION_TYPES)) return true;
     return false;
   }
 
@@ -154,20 +168,20 @@
 
   function consumableBranchOf(types) {
     var set = typeSet(types);
+    if (set.Splint) return "misc";
     var foodTypes = [];
     FOOD_GROUPS.forEach(function (group) { foodTypes = foodTypes.concat(group.types); });
     var potionTypes = [];
     POTION_GROUPS.forEach(function (group) { potionTypes = potionTypes.concat(group.types); });
     var isFood = hasAny(set, foodTypes);
     var isPotion = hasAny(set, potionTypes);
-    if (set.Sauce && set.Potion) return "food";
-    if (set.Sauce && set.Brew) return "food";
+    if (set.Sauce && (set.Potion || set.Brew)) return "food";
     if (isFood && !isPotion) return "food";
     if (isPotion && !isFood) return "potions";
     if (isFood) return "food";
     if (isPotion) return "potions";
     if (set.Millable || set.Milled) return "food";
-    return "food";
+    return "misc";
   }
 
   function groupMatch(groups, types) {
@@ -288,7 +302,11 @@
       var groupValue = "";
       if (categoryValue === "consumables") {
         var key = String(item.name || "").toLowerCase();
-        if (consumableMaps.food[key]) {
+        var set = typeSet(types);
+        if (set.Splint) {
+          branch = "misc";
+          groupValue = "";
+        } else if (consumableMaps.food[key]) {
           branch = "food";
           groupValue = consumableMaps.food[key];
         } else if (consumableMaps.potions[key]) {
@@ -486,7 +504,8 @@
         appendTaxRow("Consumable type", "consumableBranch", [
           { value: "all", label: "All" },
           { value: "food", label: "Food" },
-          { value: "potions", label: "Potions" }
+          { value: "potions", label: "Potions" },
+          { value: "misc", label: "Misc" }
         ], consumableBranch);
       }
 
