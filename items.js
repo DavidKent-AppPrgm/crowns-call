@@ -85,20 +85,27 @@
     ingredients: [
       { value: "powders", label: "Powders" },
       { value: "pigments", label: "Pigments" },
+      { value: "seeds", label: "Seeds" },
       { value: "misc", label: "Misc" }
     ]
   };
 
   // Alchemy potion folders (Unity Prefabs/.../Alchemy): Protection, Attribute (+ vial/elixir/potions/flask),
-  // Magic (+ mastery/resist), Immunities, Poison. Brews/reagents stay as sibling alchemy groups.
+  // Magic (+ mastery/resist), Immunities, Poison. Brews are a separate consumable branch.
   var POTION_GROUPS = [
     { value: "protection", label: "Protection Potion", types: ["Skin"] },
     { value: "attribute", label: "Attribute Potion", types: ["Attribute", "Vial", "Elixir", "Potions", "Flask"] },
     { value: "magic", label: "Magic Potion", types: ["Magic", "Mastery", "Resist"] },
     { value: "immunities", label: "Immunities", types: ["Immunity"] },
     { value: "poison", label: "Poison", types: ["Poison", "Venom"] },
-    { value: "brews", label: "Brews", types: ["Brew", "Juice", "Tea", "Coffee", "Alcohol", "Spirit"] },
     { value: "reagents", label: "Reagents", types: ["Inscription"] }
+  ];
+
+  var BREW_GROUPS = [
+    { value: "tea", label: "Tea", types: ["Tea"] },
+    { value: "coffee", label: "Coffee", types: ["Coffee"] },
+    { value: "alcohol", label: "Alcohol", types: ["Alcohol", "Spirit"] },
+    { value: "mix-drinks", label: "Mix Drinks", types: ["Mixed", "Juice"] }
   ];
 
   var POTION_DETAILS = {
@@ -138,7 +145,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=food3")
+  fetch("data/items.json?v=brew1")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -222,9 +229,10 @@
     var trimmed = String(name || "").trim();
     if (/ Butter$/i.test(trimmed) || /^Butter$/i.test(trimmed)) return "butter";
     if (/ Jam$/i.test(trimmed) || /^Jam$/i.test(trimmed)) return "jam";
+    if (/^Aguamiel$/i.test(trimmed)) return "jam";
     if (/ Jelly$/i.test(trimmed) || /^Jelly$/i.test(trimmed)) return "jelly";
     if (/ Paste$/i.test(trimmed) || /^Paste$/i.test(trimmed)) return "paste";
-    if (/^(Mashed Potatoes|Mashed Sweet Potato)$/i.test(trimmed)) return "paste";
+    if (/^(Mashed Potatoes|Mashed Sweet Potato|Baba Ghanoush)$/i.test(trimmed)) return "paste";
     if (/ Syrup$/i.test(trimmed) || /^Syrup$/i.test(trimmed)) return "syrup";
     if (/^(Caramel|Grenadine)$/i.test(trimmed)) return "syrup";
     if (/ Hot Sauce$/i.test(trimmed) || /^Hot Sauce$/i.test(trimmed)) return "hot-sauce";
@@ -237,7 +245,8 @@
     var trimmed = String(name || "").trim();
     if (set.Sauce || set.Oil || sauceKindOf(name)) return true;
     if (/^Guacamole$/i.test(trimmed)) return true;
-    if (/^(Mashed Potatoes|Mashed Sweet Potato)$/i.test(trimmed)) return true;
+    if (/^Yeast$/i.test(trimmed) || set.Yeast) return true;
+    if (/^(Mashed Potatoes|Mashed Sweet Potato|Baba Ghanoush|Aguamiel)$/i.test(trimmed)) return true;
     return false;
   }
 
@@ -258,23 +267,48 @@
       || /^(Salt|Pink Salt|Sugar|Bone Meal|Ground Black Pepper)$/i.test(trimmed);
   }
 
+  function isIngredientSeed(name) {
+    return / Seeds?$/i.test(String(name || "").trim());
+  }
+
+  function isBrewDrink(types, name) {
+    var set = typeSet(types);
+    if (isSauceItem(types, name)) return false;
+    if (set.Milk || set.Cheese) return false;
+    if (set.Tea || set.Coffee || set.Alcohol || set.Spirit || set.Mixed || set.Juice) return true;
+    // Plain Brew drinks that are not sauces/dairy.
+    if (set.Brew && !set.Sauce) return true;
+    return false;
+  }
+
+  function brewGroupOf(types) {
+    var set = typeSet(types);
+    if (set.Tea) return "tea";
+    if (set.Coffee) return "coffee";
+    if (set.Alcohol || set.Spirit) return "alcohol";
+    if (set.Mixed || set.Juice) return "mix-drinks";
+    return "";
+  }
+
   function consumableBranchOf(types, name) {
     var set = typeSet(types);
-    if (set.Splint || set.Bandage) return "misc";
+    if (set.Splint) return "splint";
+    if (set.Bandage) return "bandage";
     if (isSauceItem(types, name)) return "food";
+    if (isBrewDrink(types, name)) return "brews";
     var foodTypes = [];
     FOOD_GROUPS.forEach(function (group) { foodTypes = foodTypes.concat(group.types); });
     var potionTypes = [];
     POTION_GROUPS.forEach(function (group) { potionTypes = potionTypes.concat(group.types); });
     var isFood = hasAny(set, foodTypes);
-    var isPotion = hasAny(set, potionTypes);
+    var isPotion = hasAny(set, potionTypes) || set.Potion;
     if (set.Sauce && (set.Potion || set.Brew)) return "food";
     if (isFood && !isPotion) return "food";
     if (isPotion && !isFood) return "potions";
     if (isFood) return "food";
     if (isPotion) return "potions";
-    if (set.Millable || set.Milled) return "food";
-    return "misc";
+    if (set.Millable || set.Milled || set.Consumable) return "food";
+    return "";
   }
 
   function groupMatch(groups, types) {
@@ -288,6 +322,7 @@
   function foodGroupOf(types, name) {
     var set = typeSet(types);
     if (isSauceItem(types, name)) return "sauces";
+    if (/^Scrambled Egg$/i.test(String(name || "").trim())) return "meats";
     if (isRefriedBeans(name)) return "entrees";
     if (isGroundMeat(name)) return "meats";
     if (hasAny(set, ["Entree", "Sushi", "Noodle", "Rice", "Soup", "Stew", "Toast"])) return "entrees";
@@ -295,7 +330,7 @@
     if (hasAny(set, ["Meats", "Meat", "Sausage", "Seafood", "Egg"])) return "meats";
     if (set.Bread) return "breads";
     if (set.Cheese || set.Milk) return "dairy";
-    if (set.Millable || set.Milled) return "ingredients";
+    if (set.Millable || set.Milled || set.Consumable) return "ingredients";
     return "";
   }
 
@@ -322,6 +357,7 @@
     }
     if (group === "meats") {
       if (isGroundMeat(itemName)) return "ground";
+      if (/^Scrambled Egg$/i.test(itemName.trim())) return "cooked";
       if (/^(Scallop)$/i.test(itemName.trim())) return "cooked";
       if (/^(Shrimp Fillet|Tentacle)$/i.test(itemName.trim())) return "raw";
       if (/\bRaw\b/i.test(itemName)) return "raw";
@@ -333,6 +369,7 @@
     }
     if (group === "ingredients") {
       if (set.Pigment) return "pigments";
+      if (isIngredientSeed(itemName)) return "seeds";
       return isIngredientPowder(itemName) ? "powders" : "misc";
     }
     return "";
@@ -345,7 +382,6 @@
     if (set.Magic || set.Mastery || set.Resist) return "magic";
     if (set.Immunity) return "immunities";
     if (set.Poison || set.Venom) return "poison";
-    if (hasAny(set, ["Brew", "Juice", "Tea", "Coffee", "Alcohol", "Spirit"])) return "brews";
     if (set.Inscription && !set.Pigment) return "reagents";
     return "";
   }
@@ -486,8 +522,11 @@
       if (categoryValue === "consumables") {
         var key = String(item.name || "").toLowerCase();
         var set = typeSet(types);
-        if (set.Splint || set.Bandage) {
-          branch = "misc";
+        if (set.Splint) {
+          branch = "splint";
+          groupValue = "";
+        } else if (set.Bandage) {
+          branch = "bandage";
           groupValue = "";
         } else if (consumableMaps.food[key]) {
           branch = "food";
@@ -505,6 +544,8 @@
           } else if (branch === "potions") {
             groupValue = potionGroupOf(types) || groupMatch(POTION_GROUPS, types);
             detailValue = potionDetailOf(groupValue, types);
+          } else if (branch === "brews") {
+            groupValue = brewGroupOf(types) || groupMatch(BREW_GROUPS, types);
           }
         }
       }
@@ -702,7 +743,9 @@
           { value: "all", label: "All" },
           { value: "food", label: "Food" },
           { value: "potions", label: "Potions" },
-          { value: "misc", label: "Misc" }
+          { value: "brews", label: "Brews" },
+          { value: "splint", label: "Splint" },
+          { value: "bandage", label: "Bandage" }
         ], consumableBranch);
       }
 
@@ -720,6 +763,12 @@
 
       if (craft !== "all" && category === "consumables" && consumableBranch === "potions" && potionDetailsFor(consumableGroup)) {
         appendTaxRow("Potion type", "consumableDetail", [{ value: "all", label: "All" }].concat(potionDetailsFor(consumableGroup)), consumableDetail);
+      }
+
+      if (craft !== "all" && category === "consumables" && consumableBranch === "brews") {
+        appendTaxRow("Brew type", "consumableGroup", [{ value: "all", label: "All brews" }].concat(
+          BREW_GROUPS.map(function (group) { return { value: group.value, label: group.label }; })
+        ), consumableGroup);
       }
     }
 
