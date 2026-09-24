@@ -1,0 +1,92 @@
+[
+  {
+    "id": "king",
+    "name": "King",
+    "roles": ["Royalty"],
+    "description": "The ruling king of a kingdom. A royal NPC at the head of the realm."
+  },
+  {
+    "id": "queen",
+    "name": "Queen",
+    "roles": ["Royalty"],
+    "description": "The ruling queen of a kingdom. A royal NPC at the head of the realm."
+  },
+  {
+    "id": "prince",
+    "name": "Prince",
+    "roles": ["Royalty"],
+    "description": "A prince of the realm. A royal NPC of the ruling house."
+  },
+  {
+    "id": "princess",
+    "name": "Princess",
+    "roles": ["Royalty"],
+    "description": "A princess of the realm. A royal NPC of the ruling house."
+  },
+  {
+    "id": "high-priest",
+    "name": "High Priest / High Priestess",
+    "roles": ["Faith"],
+    "description": "The highest faith leader of the kingdom. Guides worship and sacred work."
+  },
+  {
+    "id": "priest",
+    "name": "Priest / Priestess",
+    "roles": ["Faith"],
+    "description": "A faith servant of the kingdom. Tends rites, shrines, and the needs of the devout."
+  },
+  {
+    "id": "general",
+    "name": "General",
+    "roles": ["Military"],
+    "description": "The military commander of the kingdom. Directs forces and defense."
+  },
+  {
+    "id": "kings-guard",
+    "name": "King's Guard",
+    "roles": ["Military"],
+    "description": "An elite guard sworn to protect the crown and the royal household."
+  },
+  {
+    "id": "guard",
+    "name": "Guard",
+    "roles": ["Military"],
+    "description": "A kingdom guard. Watches gates, walls, and the order of the settlement."
+  },
+  {
+    "id": "archer",
+    "name": "Archer",
+    "roles": ["Military"],
+    "description": "A ranged fighter of the kingdom. Trained with the bow."
+  },
+  {
+    "id": "mage",
+    "name": "Mage",
+    "roles": ["Military", "Magic"],
+    "description": "A spellcaster of the kingdom. Brings magic into battle and study."
+  },
+  {
+    "id": "blacksmith",
+    "name": "Blacksmith",
+    "roles": ["Craft"],
+    "description": "A metalworker of the kingdom. Forges tools, weapons, and armor."
+  },
+  {
+    "id": "tailor",
+    "name": "Tailor",
+    "roles": ["Craft"],
+    "description": "A clothworker of the kingdom. Cuts and sews garments and cloth goods."
+  },
+  {
+    "id": "alchemist",
+    "name": "Alchemist",
+    "roles": ["Craft"],
+    "description": "A potion-maker of the kingdom. Brews reagents, tonics, and other alchemical work."
+  },
+  {
+    "id": "peasant",
+    "name": "Peasant",
+    "roles": ["Common"],
+    "description": "A common villager of the kingdom. Lives and works on the land under your reign."
+  }
+]
