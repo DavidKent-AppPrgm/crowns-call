@@ -38,6 +38,187 @@
     { value: "misc", label: "Misc" }
   ];
 
+  var FRUIT_NAMES = {
+    "Green Apple": true,
+    "Red Apple": true,
+    "Apricot": true,
+    "Avocado": true,
+    "Banana": true,
+    "Buckeye": true,
+    "Cherry": true,
+    "Chestnut": true,
+    "Coconut": true,
+    "Fig": true,
+    "Gooseberry": true,
+    "Grapefruit": true,
+    "Hazelnut": true,
+    "Lemon": true,
+    "Lime": true,
+    "Lychee": true,
+    "Mango": true,
+    "Nutmeg": true,
+    "Olive": true,
+    "Orange": true,
+    "Papaya": true,
+    "Passion Fruit": true,
+    "Peach": true,
+    "Pear": true,
+    "Pinecone": true,
+    "Pistachio": true,
+    "Plum": true,
+    "Pomegranate": true,
+    "Samaras": true,
+    "Star Fruit": true,
+    "Walnut": true
+  };
+
+  var PLANT_NAMES = {
+    "Agave": true,
+    "Allspice": true,
+    "Almond": true,
+    "Aloe Vera": true,
+    "Autumn Crocus": true,
+    "Bamboo": true,
+    "Banana Pepper": true,
+    "Barley": true,
+    "Basil": true,
+    "Bay Leaf": true,
+    "Honey": true,
+    "Beet": true,
+    "Belladonna": true,
+    "Green Bell Pepper": true,
+    "Red Bell Pepper": true,
+    "Yellow Bell Pepper": true,
+    "Black Bean": true,
+    "Black Pepper": true,
+    "Blackberry": true,
+    "Blueberry": true,
+    "Bluebonnet": true,
+    "Broccoli": true,
+    "Cabbage": true,
+    "Cactus": true,
+    "Canola": true,
+    "Cantaloupe": true,
+    "Caradamom": true,
+    "Carrot": true,
+    "Cashew": true,
+    "Cattail": true,
+    "Cauliflower": true,
+    "Cayenne Pepper": true,
+    "Chamomile": true,
+    "Chanterelle": true,
+    "Chickpea": true,
+    "Chili Pepper": true,
+    "Blue Chrysanthemum": true,
+    "Purple Chrysanthemum": true,
+    "Red Chrysanthemum": true,
+    "White Chrysanthemum": true,
+    "Yellow Chrysanthemum": true,
+    "Cinnamon": true,
+    "Cloves": true,
+    "Cocoa Bean": true,
+    "Coffee": true,
+    "Coriander": true,
+    "Corn": true,
+    "Cotton": true,
+    "Cranberry": true,
+    "Cremini": true,
+    "Cucumber": true,
+    "Cumin": true,
+    "Daffodil": true,
+    "Daisy": true,
+    "Elder Dandelion": true,
+    "Young Dandelion": true,
+    "Death Cap": true,
+    "Destroying Angel": true,
+    "Dragon Fruit": true,
+    "Echinacea": true,
+    "Eggplant": true,
+    "Fenugreek": true,
+    "Flax": true,
+    "Fly Agaric": true,
+    "Garlic": true,
+    "Ghost Pepper": true,
+    "Ginger": true,
+    "Green Grapes": true,
+    "Purple Grapes": true,
+    "Red Grapes": true,
+    "Green Bean": true,
+    "Guava": true,
+    "Habanero": true,
+    "Hibiscus": true,
+    "Honeydew Melon": true,
+    "Jalapeño": true,
+    "Jasmine": true,
+    "Kidney Bean": true,
+    "Kiwi": true,
+    "Lavender": true,
+    "Leek": true,
+    "Lettuce": true,
+    "Lily": true,
+    "Lilypad": true,
+    "Lotus": true,
+    "Mint": true,
+    "Mustard": true,
+    "Okra": true,
+    "Green Onion": true,
+    "Purple Onion": true,
+    "White Onion": true,
+    "Yellow Onion": true,
+    "Oregano": true,
+    "Paprika": true,
+    "Papyrus": true,
+    "Parasol": true,
+    "Parsley": true,
+    "Parsnip": true,
+    "Pea": true,
+    "Peanut": true,
+    "Pineapple": true,
+    "Pinto Bean": true,
+    "Poison Ivy": true,
+    "Poison Oak": true,
+    "Poppy": true,
+    "Portobello": true,
+    "Potato": true,
+    "Pumpkin": true,
+    "Radish": true,
+    "Raspberry": true,
+    "Rice": true,
+    "Rose": true,
+    "Rosemary": true,
+    "Rye": true,
+    "Sage": true,
+    "Seaweed": true,
+    "Serrano Pepper": true,
+    "Sesame Seeds": true,
+    "Shitake": true,
+    "Soy Bean": true,
+    "Spinach": true,
+    "Strawberry": true,
+    "Sugarcane": true,
+    "Sun Flower": true,
+    "Sweet Potato": true,
+    "Thyme": true,
+    "Tomato": true,
+    "Mana Tulip": true,
+    "Orange Tulip": true,
+    "Pink Tulip": true,
+    "Red Tulip": true,
+    "White Tulip": true,
+    "Yellow Tulip": true,
+    "Tumbleweed": true,
+    "Tumeric": true,
+    "Vanilla": true,
+    "Water Hyacinth": true,
+    "Water Lily": true,
+    "Watermelon": true,
+    "Wheat": true,
+    "White Button": true,
+    "Yucca": true,
+    "Zucchini": true
+  };
+
+
   var FOOD_GROUPS = [
     { value: "entrees", label: "Entrees", types: ["Entree", "Sushi", "Noodle", "Rice", "Soup", "Stew", "Toast"] },
     { value: "desserts", label: "Desserts", types: ["Dessert", "Cookie", "Pie", "Candy", "Popsicle"] },
@@ -137,6 +318,7 @@
     Metal: true, Cloth: true, Leather: true, Mail: true, Plate: true, Ingot: true,
     Milled: true, Inscription: true, Weapon: true, Armor: true, Tool: true, Bag: true,
     Bow: true, Crossbow: true, Arrow: true, Splint: true, Bandage: true, Oil: true,
+    Thread: true, String: true, Ink: true, Explosive: true,
     Linen: true, Wool: true, Cotton: true, Lace: true, Silk: true, Satin: true,
     Denim: true, Polyester: true, Fleece: true
   };
@@ -145,7 +327,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=brew1")
+  fetch("data/items.json?v=gath1")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -186,11 +368,12 @@
     if (set.Bag || /(^| )(bag|sack|pouch|quiver)$/.test(lower) || /(^| )(bag|sack|pouch|quiver) /.test(lower)) {
       return "tools";
     }
+    if (set.Explosive || set.Pyrotechnics) return "weapons";
     if (set.Weapon || set.Bow || set.Crossbow || set.Arrow) return "weapons";
     if (set.Armor || set.Equippable) return "armor";
     if (set.Tool) return "tools";
     if (set.Consumable || set.Potion || set.Brew) return "consumables";
-    if (set.Metal || set.Wood || set.Cloth || set.Leather || set.Millable || set.Milled || set.Ingot || set.Gem || set.Stone) {
+    if (set.Metal || set.Wood || set.Cloth || set.Leather || set.Millable || set.Milled || set.Ingot || set.Gem || set.Stone || set.Thread || set.String || set.Ink) {
       return "materials";
     }
     for (var i = 0; i < MATERIALS.length; i++) {
@@ -211,9 +394,44 @@
 
   function weaponStyleOf(types) {
     var set = typeSet(types);
+    if (set.Explosive || set.Pyrotechnics) return "explosives";
     if (hasAny(set, Object.keys(RANGED_MARKERS))) return "ranged";
     if (hasAny(set, Object.keys(MAGIC_MARKERS))) return "magical";
     return "physical";
+  }
+
+  function materialKindOf(types, name) {
+    var set = typeSet(types);
+    var trimmed = String(name || "").trim();
+    if (set.Ingot || / Ingot$/i.test(trimmed)) return "ingot";
+    if (/Leather Strips$/i.test(trimmed) || / Strips$/i.test(trimmed)) return "leather-strips";
+    if (set.Leather) return "leather";
+    if (set.Thread || / Thread$/i.test(trimmed)) return "thread";
+    if (set.String || / String$/i.test(trimmed)) return "string";
+    if (set.Ink || / Ink$/i.test(trimmed)) return "ink";
+    if (set.Cloth) return "cloth";
+    return "misc";
+  }
+
+  function gatherGroupOf(types, name) {
+    var set = typeSet(types);
+    var trimmed = String(name || "").trim();
+    if (set.Coin || /Coin/i.test(trimmed)) return "currency";
+    if (set.Gem) return "gems";
+    if (/\bOre\b/i.test(trimmed)) return "ore";
+    if (FRUIT_NAMES[trimmed]) return "fruits";
+    if (PLANT_NAMES[trimmed] || set.Millable) return "plants";
+    return "misc";
+  }
+
+  function gatherDetailOf(group, types, name) {
+    if (group !== "misc") return "";
+    var trimmed = String(name || "").trim();
+    if (/^(Bowl|Wooden Bowl|Cast Iron|Chalice|Cup|Fancy Cup|Fancy Goblet|Fancy Ladle|Fancy Mug|Fancy Plate|Fork|Goblet|Knife|Ladle|Mug|Plate|Spoon)$/i.test(trimmed)) {
+      return "dishes";
+    }
+    if (/^Toy\b/i.test(trimmed)) return "toys";
+    return "junk";
   }
 
   function toolKindOf(types, name) {
@@ -501,6 +719,9 @@
     var armorFamily = "all";
     var armorDetail = "all";
     var toolKind = "all";
+    var materialKind = "all";
+    var gatherGroup = "all";
+    var gatherDetail = "all";
     var consumableBranch = "all";
     var consumableGroup = "all";
     var consumableDetail = "all";
@@ -516,9 +737,20 @@
       var types = item.types || [];
       var family = armorFamilyOf(types, item.name);
       var categoryValue = categorize(types, item.name);
+      var craftValue = isCraftable(types) ? "craftable" : "gatherable";
       var branch = "";
       var groupValue = "";
       var detailValue = "";
+      var gatherGroupValue = "";
+      var gatherDetailValue = "";
+      var materialKindValue = "";
+      if (craftValue === "gatherable") {
+        gatherGroupValue = gatherGroupOf(types, item.name);
+        gatherDetailValue = gatherDetailOf(gatherGroupValue, types, item.name);
+      }
+      if (craftValue === "craftable" && categoryValue === "materials") {
+        materialKindValue = materialKindOf(types, item.name);
+      }
       if (categoryValue === "consumables") {
         var key = String(item.name || "").toLowerCase();
         var set = typeSet(types);
@@ -554,12 +786,15 @@
       link.textContent = item.name;
       link.dataset.name = item.name.toLowerCase();
       link.dataset.category = categoryValue;
-      link.dataset.craft = isCraftable(types) ? "craftable" : "uncraftable";
+      link.dataset.craft = craftValue;
       link.dataset.damage = weaponStyleOf(types);
       link.dataset.material = materialOf(types, item.name);
       link.dataset.armorFamily = family;
       link.dataset.armorDetail = armorDetailOf(types, item.name, family);
       link.dataset.toolKind = toolKindOf(types, item.name);
+      link.dataset.materialKind = materialKindValue;
+      link.dataset.gatherGroup = gatherGroupValue;
+      link.dataset.gatherDetail = gatherDetailValue;
       link.dataset.consumableBranch = branch;
       link.dataset.consumableGroup = groupValue;
       link.dataset.consumableDetail = detailValue;
@@ -603,6 +838,9 @@
           armorFamily = "all";
           armorDetail = "all";
           toolKind = "all";
+          materialKind = "all";
+          gatherGroup = "all";
+          gatherDetail = "all";
           consumableBranch = "all";
           consumableGroup = "all";
           consumableDetail = "all";
@@ -613,6 +851,7 @@
           armorFamily = "all";
           armorDetail = "all";
           toolKind = "all";
+          materialKind = "all";
           consumableBranch = "all";
           consumableGroup = "all";
           consumableDetail = "all";
@@ -628,6 +867,13 @@
           armorDetail = value;
         } else if (level === "toolKind") {
           toolKind = value;
+        } else if (level === "materialKind") {
+          materialKind = value;
+        } else if (level === "gatherGroup") {
+          gatherGroup = value;
+          gatherDetail = "all";
+        } else if (level === "gatherDetail") {
+          gatherDetail = value;
         } else if (level === "consumableBranch") {
           consumableBranch = value;
           consumableGroup = "all";
@@ -666,6 +912,9 @@
         && (armorFamily === "all" || node.dataset.armorFamily === armorFamily)
         && (armorDetail === "all" || node.dataset.armorDetail === armorDetail)
         && (toolKind === "all" || node.dataset.toolKind === toolKind)
+        && (materialKind === "all" || node.dataset.materialKind === materialKind)
+        && (gatherGroup === "all" || node.dataset.gatherGroup === gatherGroup)
+        && (gatherDetail === "all" || node.dataset.gatherDetail === gatherDetail)
         && (consumableBranch === "all" || node.dataset.consumableBranch === consumableBranch)
         && (consumableGroup === "all" || node.dataset.consumableGroup === consumableGroup)
         && (consumableDetail === "all" || node.dataset.consumableDetail === consumableDetail);
@@ -675,60 +924,82 @@
       if (!taxonomyRoot) return;
       taxonomyRoot.innerHTML = "";
 
-      appendTaxRow("Craftable or uncraftable", "craft", [
+      appendTaxRow("Craftable or gatherable", "craft", [
         { value: "all", label: "All" },
         { value: "craftable", label: "Craftable" },
-        { value: "uncraftable", label: "Uncraftable" }
+        { value: "gatherable", label: "Gatherable" }
       ], craft);
 
-      if (craft !== "all") {
+      if (craft === "gatherable") {
+        appendTaxRow("Gathered type", "gatherGroup", [
+          { value: "all", label: "All" },
+          { value: "currency", label: "Currency" },
+          { value: "fruits", label: "Fruits" },
+          { value: "plants", label: "Plants" },
+          { value: "gems", label: "Gems" },
+          { value: "ore", label: "Ore" },
+          { value: "misc", label: "Misc" }
+        ], gatherGroup);
+      }
+
+      if (craft === "gatherable" && gatherGroup === "misc") {
+        appendTaxRow("Misc type", "gatherDetail", [
+          { value: "all", label: "All" },
+          { value: "dishes", label: "Dishes" },
+          { value: "toys", label: "Toys" },
+          { value: "junk", label: "Junk" }
+        ], gatherDetail);
+      }
+
+      if (craft === "craftable") {
         appendTaxRow("Item type", "category", [{ value: "all", label: "All" }].concat(CATEGORIES), category);
       }
 
-      if (craft !== "all" && category === "weapons") {
+      if (craft === "craftable" && category === "weapons") {
         appendTaxRow("Weapon type", "damage", [
           { value: "all", label: "All" },
           { value: "physical", label: "Physical" },
           { value: "ranged", label: "Ranged" },
-          { value: "magical", label: "Magical" }
+          { value: "magical", label: "Magical" },
+          { value: "explosives", label: "Explosives" }
         ], damage);
       }
 
-      if (craft !== "all" && category === "weapons" && damage === "physical") {
+      if (craft === "craftable" && category === "weapons" && damage === "physical") {
         appendTaxRow("Material", "material", [{ value: "all", label: "All materials" }].concat(
           MATERIALS.map(function (name) { return { value: name, label: name }; })
         ), material);
       }
 
-      if (craft !== "all" && category === "weapons" && damage === "ranged") {
+      if (craft === "craftable" && category === "weapons" && damage === "ranged") {
         appendTaxRow("Material", "material", [{ value: "all", label: "All materials" }].concat(
           MATERIALS.map(function (name) { return { value: name, label: name }; })
         ), material);
       }
 
-      if (craft !== "all" && category === "armor") {
+      if (craft === "craftable" && category === "armor") {
         appendTaxRow("Armor type", "armorFamily", [{ value: "all", label: "All" }].concat(ARMOR_FAMILIES), armorFamily);
       }
 
-      if (craft !== "all" && category === "armor" && armorFamily === "cloth") {
+      if (craft === "craftable" && category === "armor" && armorFamily === "cloth") {
         appendTaxRow("Cloth", "armorDetail", [{ value: "all", label: "All cloth" }].concat(
           CLOTH_FABRICS.map(function (name) { return { value: name, label: name }; })
         ), armorDetail);
       }
 
-      if (craft !== "all" && category === "armor" && armorFamily === "leather") {
+      if (craft === "craftable" && category === "armor" && armorFamily === "leather") {
         appendTaxRow("Leather", "armorDetail", [{ value: "all", label: "All leather" }].concat(
           LEATHER_GRADES.map(function (name) { return { value: name, label: name }; })
         ), armorDetail);
       }
 
-      if (craft !== "all" && category === "armor" && (armorFamily === "mail" || armorFamily === "plate" || armorFamily === "jewelry")) {
+      if (craft === "craftable" && category === "armor" && (armorFamily === "mail" || armorFamily === "plate" || armorFamily === "jewelry")) {
         appendTaxRow("Metal", "armorDetail", [{ value: "all", label: "All metals" }].concat(
           ARMOR_METALS.map(function (name) { return { value: name, label: name }; })
         ), armorDetail);
       }
 
-      if (craft !== "all" && category === "tools") {
+      if (craft === "craftable" && category === "tools") {
         appendTaxRow("Tool type", "toolKind", [
           { value: "all", label: "All" },
           { value: "pickaxe", label: "Pickaxe" },
@@ -738,7 +1009,21 @@
         ], toolKind);
       }
 
-      if (craft !== "all" && category === "consumables") {
+      if (craft === "craftable" && category === "materials") {
+        appendTaxRow("Material type", "materialKind", [
+          { value: "all", label: "All" },
+          { value: "ingot", label: "Ingot" },
+          { value: "leather", label: "Leather" },
+          { value: "leather-strips", label: "Leather Strips" },
+          { value: "thread", label: "Thread" },
+          { value: "string", label: "String" },
+          { value: "cloth", label: "Cloth" },
+          { value: "ink", label: "Ink" },
+          { value: "misc", label: "Misc" }
+        ], materialKind);
+      }
+
+      if (craft === "craftable" && category === "consumables") {
         appendTaxRow("Consumable type", "consumableBranch", [
           { value: "all", label: "All" },
           { value: "food", label: "Food" },
@@ -749,23 +1034,23 @@
         ], consumableBranch);
       }
 
-      if (craft !== "all" && category === "consumables" && consumableBranch === "food") {
+      if (craft === "craftable" && category === "consumables" && consumableBranch === "food") {
         appendTaxRow("Cooking", "consumableGroup", [{ value: "all", label: "All food" }].concat(foodGroupOptions), consumableGroup);
       }
 
-      if (craft !== "all" && category === "consumables" && consumableBranch === "food" && FOOD_DETAILS[consumableGroup]) {
+      if (craft === "craftable" && category === "consumables" && consumableBranch === "food" && FOOD_DETAILS[consumableGroup]) {
         appendTaxRow("Food type", "consumableDetail", [{ value: "all", label: "All" }].concat(FOOD_DETAILS[consumableGroup]), consumableDetail);
       }
 
-      if (craft !== "all" && category === "consumables" && consumableBranch === "potions") {
+      if (craft === "craftable" && category === "consumables" && consumableBranch === "potions") {
         appendTaxRow("Alchemy", "consumableGroup", [{ value: "all", label: "All potions" }].concat(potionGroupOptions), consumableGroup);
       }
 
-      if (craft !== "all" && category === "consumables" && consumableBranch === "potions" && potionDetailsFor(consumableGroup)) {
+      if (craft === "craftable" && category === "consumables" && consumableBranch === "potions" && potionDetailsFor(consumableGroup)) {
         appendTaxRow("Potion type", "consumableDetail", [{ value: "all", label: "All" }].concat(potionDetailsFor(consumableGroup)), consumableDetail);
       }
 
-      if (craft !== "all" && category === "consumables" && consumableBranch === "brews") {
+      if (craft === "craftable" && category === "consumables" && consumableBranch === "brews") {
         appendTaxRow("Brew type", "consumableGroup", [{ value: "all", label: "All brews" }].concat(
           BREW_GROUPS.map(function (group) { return { value: group.value, label: group.label }; })
         ), consumableGroup);
@@ -815,6 +1100,20 @@
             return (craft === "all" || node.dataset.craft === craft)
               && (category === "all" || node.dataset.category === category)
               && node.dataset.toolKind === option.value;
+          }
+          if (level === "materialKind") {
+            return (craft === "all" || node.dataset.craft === craft)
+              && (category === "all" || node.dataset.category === category)
+              && node.dataset.materialKind === option.value;
+          }
+          if (level === "gatherGroup") {
+            return (craft === "all" || node.dataset.craft === craft)
+              && node.dataset.gatherGroup === option.value;
+          }
+          if (level === "gatherDetail") {
+            return (craft === "all" || node.dataset.craft === craft)
+              && (gatherGroup === "all" || node.dataset.gatherGroup === gatherGroup)
+              && node.dataset.gatherDetail === option.value;
           }
           if (level === "consumableBranch") {
             return (craft === "all" || node.dataset.craft === craft)
