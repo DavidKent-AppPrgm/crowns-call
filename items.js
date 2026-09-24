@@ -50,9 +50,12 @@
 
   var FOOD_DETAILS = {
     entrees: [
-      { value: "soup", label: "Soup" },
-      { value: "stew", label: "Stew" },
+      { value: "soup", label: "Soups" },
+      { value: "stew", label: "Stews" },
+      { value: "noodles", label: "Noodles" },
+      { value: "rice", label: "Rice" },
       { value: "sushi", label: "Sushi" },
+      { value: "pizza", label: "Pizza" },
       { value: "toast", label: "Toast" },
       { value: "misc", label: "Misc" }
     ],
@@ -65,8 +68,7 @@
     ],
     meats: [
       { value: "cooked", label: "Cooked" },
-      { value: "raw", label: "Raw" },
-      { value: "misc", label: "Misc" }
+      { value: "raw", label: "Raw" }
     ],
     sauces: [
       { value: "butter", label: "Butter" },
@@ -74,6 +76,11 @@
       { value: "jelly", label: "Jelly" },
       { value: "paste", label: "Paste" },
       { value: "syrup", label: "Syrup" },
+      { value: "hot-sauce", label: "Hot Sauce" },
+      { value: "misc", label: "Misc" }
+    ],
+    ingredients: [
+      { value: "powders", label: "Powders" },
       { value: "misc", label: "Misc" }
     ]
   };
@@ -116,7 +123,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=ccs1")
+  fetch("data/items.json?v=food2")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -203,12 +210,21 @@
     if (/ Jelly$/i.test(trimmed) || /^Jelly$/i.test(trimmed)) return "jelly";
     if (/ Paste$/i.test(trimmed) || /^Paste$/i.test(trimmed)) return "paste";
     if (/ Syrup$/i.test(trimmed) || /^Syrup$/i.test(trimmed)) return "syrup";
+    if (/ Hot Sauce$/i.test(trimmed) || /^Hot Sauce$/i.test(trimmed)) return "hot-sauce";
     return "";
   }
 
   function isSauceItem(types, name) {
     var set = typeSet(types);
     return !!(set.Sauce || sauceKindOf(name));
+  }
+
+  function isIngredientPowder(name) {
+    var trimmed = String(name || "").trim();
+    return / Powder$/i.test(trimmed)
+      || / Flour$/i.test(trimmed)
+      || /^Flour$/i.test(trimmed)
+      || /^(Salt|Pink Salt|Sugar|Bone Meal|Ground Black Pepper)$/i.test(trimmed);
   }
 
   function consumableBranchOf(types, name) {
@@ -252,10 +268,14 @@
 
   function foodDetailOf(group, types, name) {
     var set = typeSet(types);
+    var itemName = String(name || "");
     if (group === "entrees") {
       if (set.Soup) return "soup";
       if (set.Stew) return "stew";
+      if (set.Noodle) return "noodles";
+      if (set.Rice) return "rice";
       if (set.Sushi) return "sushi";
+      if (/\bPizza\b/i.test(itemName)) return "pizza";
       if (set.Toast) return "toast";
       return "misc";
     }
@@ -267,15 +287,16 @@
       return "misc";
     }
     if (group === "meats") {
-      if (/\bRaw\b/i.test(name || "")) return "raw";
-      if (/^(Cooked|Grilled|Roasted|Boiled|Fried|Deviled|Hard Boiled|Canned)\b/i.test(name || "")
-        || /\b(Bratwurst|Pepperoni|Steak|Ikayaki)\b/i.test(name || "")) {
-        return "cooked";
-      }
-      return "misc";
+      if (/^(Scallop)$/i.test(itemName.trim())) return "cooked";
+      if (/^(Shrimp Fillet|Tentacle)$/i.test(itemName.trim())) return "raw";
+      if (/\bRaw\b/i.test(itemName)) return "raw";
+      return "cooked";
     }
     if (group === "sauces") {
       return sauceKindOf(name) || "misc";
+    }
+    if (group === "ingredients") {
+      return isIngredientPowder(itemName) ? "powders" : "misc";
     }
     return "";
   }
