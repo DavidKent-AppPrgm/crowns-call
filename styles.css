@@ -489,6 +489,45 @@ th {
   margin: 1.6rem 0 0.4rem;
 }
 
+.attr-board__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.attr-board__status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+  transition: color 180ms ease;
+}
+
+.attr-board__status.is-hot {
+  color: var(--gold);
+}
+
+.attr-reset {
+  appearance: none;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--gold);
+  font: inherit;
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+}
+
+.attr-reset:hover {
+  border-color: var(--ember);
+  color: var(--text);
+  background: rgba(226, 91, 58, 0.12);
+}
+
 .attr-panel {
   position: relative;
   padding: 1.15rem 1.15rem 1.25rem;
@@ -568,18 +607,22 @@ th {
   justify-content: flex-end;
   gap: 0.35rem;
   min-height: 4.4rem;
-  padding: 0.85rem 0.95rem;
+  padding: 0.85rem 0.95rem 0.8rem;
   border: 1px solid rgba(231, 201, 138, 0.22);
   background:
     radial-gradient(circle at 12% 0%, rgba(231, 201, 138, 0.12), transparent 55%),
     var(--bg-inset);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
   transition: border-color 180ms ease, transform 180ms ease, background-color 180ms ease;
   animation: attr-rise 520ms ease both;
 }
 
 .attr-tiles--major .attr-tile {
-  min-height: 5.6rem;
-  padding: 1rem 1.05rem 1.05rem;
+  min-height: 6.2rem;
+  padding: 1rem 1.05rem 0.9rem;
 }
 
 .attr-tile:nth-child(1) { animation-delay: 40ms; }
@@ -598,6 +641,21 @@ th {
   background:
     radial-gradient(circle at 18% 0%, rgba(226, 91, 58, 0.14), transparent 50%),
     var(--bg-raised);
+}
+
+.attr-tile.is-selected {
+  border-color: var(--ember);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(226, 91, 58, 0.18), transparent 55%),
+    var(--bg-raised);
+}
+
+.attr-tile.is-filled .attr-tile__value {
+  color: var(--gold);
+}
+
+.attr-tile.is-blocked:not(.is-filled):not(.is-selected) {
+  opacity: 0.72;
 }
 
 .attr-tile__mark {
@@ -631,6 +689,103 @@ th {
   font-size: 1.22rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.attr-tile__value {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  line-height: 1;
+}
+
+.attr-tile__controls {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.attr-tile__chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.55rem;
+  height: 1.55rem;
+  border: 1px solid rgba(231, 201, 138, 0.28);
+  background: rgba(17, 14, 11, 0.55);
+  color: var(--gold);
+  font-size: 1rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.attr-tile__chip:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+.attr-detail {
+  padding: 1.1rem 1.2rem 1.2rem;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, rgba(226, 91, 58, 0.08), transparent 40%),
+    var(--bg-inset);
+}
+
+.attr-detail[hidden] {
+  display: none;
+}
+
+.attr-detail__top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.35rem;
+}
+
+.attr-detail__top h3 {
+  margin: 0;
+  font-family: var(--serif);
+  letter-spacing: 0.05em;
+}
+
+.attr-detail p {
+  margin: 0.35rem 0 0;
+}
+
+.attr-detail__spend {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.attr-detail__value {
+  margin: 0;
+  min-width: 5.5rem;
+  text-align: center;
+  color: var(--text);
+  font-family: var(--serif);
+  letter-spacing: 0.04em;
+}
+
+.attr-step {
+  appearance: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-raised);
+  color: var(--gold);
+  font: inherit;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.attr-step:hover {
+  border-color: var(--ember);
+  color: var(--text);
 }
 
 @keyframes attr-rise {

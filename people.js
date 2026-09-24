@@ -4,7 +4,7 @@
   var sheetRoot = document.querySelector("[data-person-sheet]");
   if (!listRoot && !sheetRoot) return;
 
-  fetch("data/people.json?v=peoples3")
+  fetch("data/people.json?v=peoples4")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
