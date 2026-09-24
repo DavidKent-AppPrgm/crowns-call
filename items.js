@@ -57,6 +57,7 @@
       { value: "sushi", label: "Sushi" },
       { value: "pizza", label: "Pizza" },
       { value: "toast", label: "Toast" },
+      { value: "beans", label: "Beans" },
       { value: "misc", label: "Misc" }
     ],
     desserts: [
@@ -68,7 +69,8 @@
     ],
     meats: [
       { value: "cooked", label: "Cooked" },
-      { value: "raw", label: "Raw" }
+      { value: "raw", label: "Raw" },
+      { value: "ground", label: "Ground" }
     ],
     sauces: [
       { value: "butter", label: "Butter" },
@@ -82,6 +84,7 @@
     ],
     ingredients: [
       { value: "powders", label: "Powders" },
+      { value: "pigments", label: "Pigments" },
       { value: "misc", label: "Misc" }
     ]
   };
@@ -95,7 +98,7 @@
     { value: "immunities", label: "Immunities", types: ["Immunity"] },
     { value: "poison", label: "Poison", types: ["Poison", "Venom"] },
     { value: "brews", label: "Brews", types: ["Brew", "Juice", "Tea", "Coffee", "Alcohol", "Spirit"] },
-    { value: "reagents", label: "Reagents", types: ["Pigment", "Inscription"] }
+    { value: "reagents", label: "Reagents", types: ["Inscription"] }
   ];
 
   var POTION_DETAILS = {
@@ -135,7 +138,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=alc1")
+  fetch("data/items.json?v=food3")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -221,7 +224,9 @@
     if (/ Jam$/i.test(trimmed) || /^Jam$/i.test(trimmed)) return "jam";
     if (/ Jelly$/i.test(trimmed) || /^Jelly$/i.test(trimmed)) return "jelly";
     if (/ Paste$/i.test(trimmed) || /^Paste$/i.test(trimmed)) return "paste";
+    if (/^(Mashed Potatoes|Mashed Sweet Potato)$/i.test(trimmed)) return "paste";
     if (/ Syrup$/i.test(trimmed) || /^Syrup$/i.test(trimmed)) return "syrup";
+    if (/^(Caramel|Grenadine)$/i.test(trimmed)) return "syrup";
     if (/ Hot Sauce$/i.test(trimmed) || /^Hot Sauce$/i.test(trimmed)) return "hot-sauce";
     if (/ Oil$/i.test(trimmed) || /^Oil$/i.test(trimmed)) return "oil";
     return "";
@@ -229,7 +234,20 @@
 
   function isSauceItem(types, name) {
     var set = typeSet(types);
-    return !!(set.Sauce || set.Oil || sauceKindOf(name));
+    var trimmed = String(name || "").trim();
+    if (set.Sauce || set.Oil || sauceKindOf(name)) return true;
+    if (/^Guacamole$/i.test(trimmed)) return true;
+    if (/^(Mashed Potatoes|Mashed Sweet Potato)$/i.test(trimmed)) return true;
+    return false;
+  }
+
+  function isGroundMeat(name) {
+    var trimmed = String(name || "").trim();
+    return /^Ground /i.test(trimmed) && !/Black Pepper/i.test(trimmed);
+  }
+
+  function isRefriedBeans(name) {
+    return /^Refried .+\bBeans$/i.test(String(name || "").trim());
   }
 
   function isIngredientPowder(name) {
@@ -270,6 +288,8 @@
   function foodGroupOf(types, name) {
     var set = typeSet(types);
     if (isSauceItem(types, name)) return "sauces";
+    if (isRefriedBeans(name)) return "entrees";
+    if (isGroundMeat(name)) return "meats";
     if (hasAny(set, ["Entree", "Sushi", "Noodle", "Rice", "Soup", "Stew", "Toast"])) return "entrees";
     if (hasAny(set, ["Dessert", "Cookie", "Pie", "Candy", "Popsicle"])) return "desserts";
     if (hasAny(set, ["Meats", "Meat", "Sausage", "Seafood", "Egg"])) return "meats";
@@ -290,6 +310,7 @@
       if (set.Sushi) return "sushi";
       if (/\bPizza\b/i.test(itemName)) return "pizza";
       if (set.Toast) return "toast";
+      if (isRefriedBeans(itemName)) return "beans";
       return "misc";
     }
     if (group === "desserts") {
@@ -300,6 +321,7 @@
       return "misc";
     }
     if (group === "meats") {
+      if (isGroundMeat(itemName)) return "ground";
       if (/^(Scallop)$/i.test(itemName.trim())) return "cooked";
       if (/^(Shrimp Fillet|Tentacle)$/i.test(itemName.trim())) return "raw";
       if (/\bRaw\b/i.test(itemName)) return "raw";
@@ -310,6 +332,7 @@
       return sauceKindOf(name) || "misc";
     }
     if (group === "ingredients") {
+      if (set.Pigment) return "pigments";
       return isIngredientPowder(itemName) ? "powders" : "misc";
     }
     return "";
@@ -323,7 +346,7 @@
     if (set.Immunity) return "immunities";
     if (set.Poison || set.Venom) return "poison";
     if (hasAny(set, ["Brew", "Juice", "Tea", "Coffee", "Alcohol", "Spirit"])) return "brews";
-    if (set.Pigment || set.Inscription) return "reagents";
+    if (set.Inscription && !set.Pigment) return "reagents";
     return "";
   }
 
