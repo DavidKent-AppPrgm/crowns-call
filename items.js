@@ -58,7 +58,7 @@
     { value: "skins", label: "Skins", types: ["Skin"] },
     { value: "magics", label: "Magic", types: ["Magic"] },
     { value: "poisons", label: "Poisons", types: ["Poison", "Venom"] },
-    { value: "remedies", label: "Remedies", types: ["Bandage", "Oil"] },
+    { value: "remedies", label: "Remedies", types: ["Oil"] },
     { value: "reagents", label: "Reagents", types: ["Pigment", "Inscription"] }
   ];
 
@@ -71,13 +71,13 @@
   var PREPARED_POTION_TYPES = [
     "Potion", "Potions", "Flask", "Vial", "Elixir", "Brew", "Juice", "Tea", "Coffee",
     "Alcohol", "Spirit", "Attribute", "Mastery", "Resist", "Immunity", "Skin", "Magic",
-    "Poison", "Venom", "Bandage", "Oil", "Pigment", "Inscription"
+    "Poison", "Venom", "Oil", "Pigment", "Inscription"
   ];
 
   var CRAFT_MARKERS = {
     Metal: true, Cloth: true, Leather: true, Mail: true, Plate: true, Ingot: true,
     Milled: true, Inscription: true, Weapon: true, Armor: true, Tool: true, Bag: true,
-    Bow: true, Crossbow: true, Arrow: true, Splint: true,
+    Bow: true, Crossbow: true, Arrow: true, Splint: true, Bandage: true,
     Linen: true, Wool: true, Cotton: true, Lace: true, Silk: true, Satin: true,
     Denim: true, Polyester: true, Fleece: true
   };
@@ -168,7 +168,7 @@
 
   function consumableBranchOf(types) {
     var set = typeSet(types);
-    if (set.Splint) return "misc";
+    if (set.Splint || set.Bandage) return "misc";
     var foodTypes = [];
     FOOD_GROUPS.forEach(function (group) { foodTypes = foodTypes.concat(group.types); });
     var potionTypes = [];
@@ -303,7 +303,7 @@
       if (categoryValue === "consumables") {
         var key = String(item.name || "").toLowerCase();
         var set = typeSet(types);
-        if (set.Splint) {
+        if (set.Splint || set.Bandage) {
           branch = "misc";
           groupValue = "";
         } else if (consumableMaps.food[key]) {
