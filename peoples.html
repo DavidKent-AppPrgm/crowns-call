@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=peoples1">
+  <link rel="stylesheet" href="styles.css?v=peoples2">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -55,25 +55,46 @@
         <h2>The character you create</h2>
         <p>Create the characters you want. Begin with a variety of avatar icons, appearance features, and character attributes. Everyone starts with 18 minor attribute points and 5 major attribute points.</p>
 
-        <h3>Major attributes</h3>
-        <ul>
-          <li>Health</li>
-          <li>Stamina</li>
-          <li>Mana</li>
-        </ul>
+        <div class="attr-board">
+          <section class="attr-panel attr-panel--major" aria-labelledby="major-attrs">
+            <header class="attr-panel__head">
+              <p class="attr-panel__points"><span>5</span> points</p>
+              <h3 id="major-attrs">Major attributes</h3>
+            </header>
+            <ul class="attr-tiles attr-tiles--major">
+              <li class="attr-tile attr-tile--health">
+                <span class="attr-tile__mark" aria-hidden="true"></span>
+                <span class="attr-tile__name">Health</span>
+              </li>
+              <li class="attr-tile attr-tile--stamina">
+                <span class="attr-tile__mark" aria-hidden="true"></span>
+                <span class="attr-tile__name">Stamina</span>
+              </li>
+              <li class="attr-tile attr-tile--mana">
+                <span class="attr-tile__mark" aria-hidden="true"></span>
+                <span class="attr-tile__name">Mana</span>
+              </li>
+            </ul>
+          </section>
 
-        <h3>Minor attributes</h3>
-        <ul>
-          <li>Strength</li>
-          <li>Toughness</li>
-          <li>Constitution</li>
-          <li>Agility</li>
-          <li>Dexterity</li>
-          <li>Endurance</li>
-          <li>Intelligence</li>
-          <li>Wisdom</li>
-          <li>Spirit</li>
-        </ul>
+          <section class="attr-panel attr-panel--minor" aria-labelledby="minor-attrs">
+            <header class="attr-panel__head">
+              <p class="attr-panel__points"><span>18</span> points</p>
+              <h3 id="minor-attrs">Minor attributes</h3>
+            </header>
+            <ul class="attr-tiles attr-tiles--minor">
+              <li class="attr-tile"><span class="attr-tile__name">Strength</span></li>
+              <li class="attr-tile"><span class="attr-tile__name">Toughness</span></li>
+              <li class="attr-tile"><span class="attr-tile__name">Constitution</span></li>
+              <li class="attr-tile"><span class="attr-tile__name">Agility</span></li>
+              <li class="attr-tile"><span class="attr-tile__name">Dexterity</span></li>
+              <li class="attr-tile"><span class="attr-tile__name">Endurance</span></li>
+              <li class="attr-tile"><span class="attr-tile__name">Intelligence</span></li>
+              <li class="attr-tile"><span class="attr-tile__name">Wisdom</span></li>
+              <li class="attr-tile"><span class="attr-tile__name">Spirit</span></li>
+            </ul>
+          </section>
+        </div>
       </article>
     </div>
   </main>
@@ -85,6 +106,6 @@
       <a href="https://github.com/DavidKent-AppPrgm/crowns-call">Source</a>
     </nav>
   </footer>
-  <script src="site.js?v=peoples1"></script>
+  <script src="site.js?v=peoples2"></script>
 </body>
 </html>
