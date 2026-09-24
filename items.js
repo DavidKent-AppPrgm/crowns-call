@@ -116,7 +116,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json")
+  fetch("data/items.json?v=ccs1")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
