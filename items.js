@@ -34,11 +34,30 @@
     { value: "armor", label: "Armor" },
     { value: "tools", label: "Tools" },
     { value: "consumables", label: "Consumables" },
-    { value: "materials", label: "Materials" },
-    { value: "misc", label: "Misc" }
+    { value: "materials", label: "Materials" }
   ];
 
+  // Forced craftable materials (empty or odd types that still belong under Materials > Misc).
+  var FORCE_MATERIALS = {
+    "Paper": true,
+    "Glass": true,
+    "Empty Glass": true,
+    "Alchemist's Vial": true,
+    "Plastic": true,
+    "Candle": true,
+    "Yeast": true
+  };
+
+  // Forced craftable foods that lack prepared cooking type tags.
+  var FORCE_FOOD = {
+    "Brown Sugar": true,
+    "Buttermilk": true,
+    "Milk": true,
+    "Tofu": true
+  };
+
   var FRUIT_NAMES = {
+    "Almond": true,
     "Apricot": true,
     "Avocado": true,
     "Banana": true,
@@ -46,9 +65,13 @@
     "Blueberry": true,
     "Buckeye": true,
     "Cantaloupe": true,
+    "Cashew": true,
+    "Cashew Fruit": true,
     "Cherry": true,
     "Chestnut": true,
+    "Chestnut Shell": true,
     "Coconut": true,
+    "Coffee Cherry": true,
     "Cranberry": true,
     "Dragon Fruit": true,
     "Fig": true,
@@ -65,11 +88,13 @@
     "Lychee": true,
     "Mango": true,
     "Nutmeg": true,
+    "Nutmeg Seed": true,
     "Olive": true,
     "Orange": true,
     "Papaya": true,
     "Passion Fruit": true,
     "Peach": true,
+    "Peanut": true,
     "Pear": true,
     "Pineapple": true,
     "Pinecone": true,
@@ -85,6 +110,41 @@
     "Strawberry": true,
     "Walnut": true,
     "Watermelon": true
+  };
+
+  var FLOWER_NAMES = {
+    "Autumn Crocus": true,
+    "Blue Chrysanthemum": true,
+    "Bluebonnet": true,
+    "Chamomile": true,
+    "Daffodil": true,
+    "Daisy": true,
+    "Echinacea": true,
+    "Elder Dandelion": true,
+    "Hibiscus": true,
+    "Jasmine": true,
+    "Lavender": true,
+    "Lily": true,
+    "Lilypad": true,
+    "Lotus": true,
+    "Mana Tulip": true,
+    "Mustard Flower": true,
+    "Orange Tulip": true,
+    "Pink Tulip": true,
+    "Poppy": true,
+    "Purple Chrysanthemum": true,
+    "Red Chrysanthemum": true,
+    "Red Tulip": true,
+    "Rose": true,
+    "Rosemary": true,
+    "Sun Flower": true,
+    "Water Hyacinth": true,
+    "Water Lily": true,
+    "White Chrysanthemum": true,
+    "White Tulip": true,
+    "Yellow Chrysanthemum": true,
+    "Yellow Tulip": true,
+    "Young Dandelion": true
   };
 
   var VEGETABLE_NAMES = {
@@ -375,8 +435,7 @@
     { value: "juice", label: "Juice", types: ["Juice"] },
     { value: "tea", label: "Tea", types: ["Tea"] },
     { value: "coffee", label: "Coffee", types: ["Coffee"] },
-    { value: "alcohol", label: "Alcohol", types: ["Alcohol", "Spirit"] },
-    { value: "mix-drinks", label: "Mix Drinks", types: ["Mixed"] }
+    { value: "alcohol", label: "Alcohol", types: ["Alcohol", "Spirit", "Mixed"] }
   ];
 
   var POTION_DETAILS = {
@@ -417,7 +476,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=flora1")
+  fetch("data/items.json?v=cleanup1")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -454,7 +513,10 @@
 
   function categorize(types, name) {
     var set = typeSet(types);
-    var lower = String(name || "").toLowerCase();
+    var trimmed = String(name || "").trim();
+    var lower = trimmed.toLowerCase();
+    if (FORCE_MATERIALS[trimmed]) return "materials";
+    if (FORCE_FOOD[trimmed]) return "consumables";
     if (set.Bag || /(^| )(bag|sack|pouch|quiver)$/.test(lower) || /(^| )(bag|sack|pouch|quiver) /.test(lower)) {
       return "tools";
     }
@@ -472,7 +534,9 @@
     return "misc";
   }
 
-  function isCraftable(types) {
+  function isCraftable(types, name) {
+    var trimmed = String(name || "").trim();
+    if (FORCE_MATERIALS[trimmed] || FORCE_FOOD[trimmed]) return true;
     var set = typeSet(types);
     for (var key in CRAFT_MARKERS) {
       if (set[key]) return true;
@@ -511,37 +575,64 @@
 
   function faunaDetailOf(name) {
     var trimmed = String(name || "").trim();
-    if (/Antler/i.test(trimmed) || /\bBones?\b/i.test(trimmed) || /Skull/i.test(trimmed)) return "bones";
+    if (/Antler/i.test(trimmed) || /\bBones?\b/i.test(trimmed) || /Skull/i.test(trimmed) || /Ivory/i.test(trimmed)) {
+      return "bones";
+    }
     if (/^(Animal Guts|Animal Fat|Brain|Eyeball|Heart|Tail)$/i.test(trimmed)) return "guts";
-    if (/^Raw .+ Meat$/i.test(trimmed) || FAUNA_FISH[trimmed] || /^Frog Legs$/i.test(trimmed) || / Snake$/i.test(trimmed)) {
+    if (/^Raw /i.test(trimmed) || FAUNA_FISH[trimmed] || /^Frog Legs$/i.test(trimmed) || / Snake$/i.test(trimmed) || /^Egg$/i.test(trimmed)) {
       return "meats";
     }
-    if (/^(Ladybug|Silkworm|Worm)$/i.test(trimmed) || /Jellyfish$/i.test(trimmed)) return "critters";
-    if (/Hide$/i.test(trimmed) || /Pelt$/i.test(trimmed) || /^Feather$/i.test(trimmed) || /Head$/i.test(trimmed) || /^Head of /i.test(trimmed)) {
+    if (/Pelt$/i.test(trimmed)) return "pelts";
+    if (
+      /^(Ladybug|Silkworm|Worm|Bee|Beetle|Black Ant|Red Ant|Caterpillar|Dragonfly|Firefly|Fly|Scorpion|Snail)$/i.test(trimmed)
+      || /Jellyfish$/i.test(trimmed)
+      || /Butterfly$/i.test(trimmed)
+      || /Spider$/i.test(trimmed)
+    ) {
+      return "critters";
+    }
+    if (
+      /Hide$/i.test(trimmed)
+      || /^Feather$/i.test(trimmed)
+      || /Head$/i.test(trimmed)
+      || /^Head of /i.test(trimmed)
+      || /^Wool$/i.test(trimmed)
+      || /Dinosaur Egg$/i.test(trimmed)
+    ) {
       return "misc";
     }
     return "";
   }
 
   function floraDetailOf(types, name) {
-    var set = typeSet(types);
     var trimmed = String(name || "").trim();
+    if (FLOWER_NAMES[trimmed]) return "flowers";
     if (FRUIT_NAMES[trimmed] || /^Coconut Meat$/i.test(trimmed)) return "fruits";
     if (VEGETABLE_NAMES[trimmed]) return "vegetables";
     if (FUNGI_NAMES[trimmed]) return "fungi";
     if (GRAIN_NAMES[trimmed]) return "grain";
-    if (PLANT_NAMES[trimmed] || set.Millable) return "misc";
+    if (PLANT_NAMES[trimmed]) return "misc";
     return "";
+  }
+
+  function mineralDetailOf(types, name) {
+    var set = typeSet(types);
+    var trimmed = String(name || "").trim();
+    if (/^(Sand|Sulfur|Coal|Salt Rock|Pink Salt Rock)$/i.test(trimmed)) return "misc";
+    if (/\bOre\b/i.test(trimmed)) return "ore";
+    if (set.Gem) return "gems";
+    return "misc";
   }
 
   function gatherGroupOf(types, name) {
     var set = typeSet(types);
     var trimmed = String(name || "").trim();
     if (set.Coin || /Coin/i.test(trimmed)) return "currency";
-    if (set.Gem) return "gems";
-    if (/\bOre\b/i.test(trimmed)) return "ore";
     if (faunaDetailOf(trimmed)) return "fauna";
     if (floraDetailOf(types, trimmed)) return "flora";
+    if (set.Gem || /\bOre\b/i.test(trimmed) || /^(Sand|Sulfur|Coal|Salt Rock|Pink Salt Rock)$/i.test(trimmed)) {
+      return "minerals";
+    }
     return "misc";
   }
 
@@ -549,13 +640,17 @@
     var trimmed = String(name || "").trim();
     if (group === "flora") return floraDetailOf(types, trimmed) || "misc";
     if (group === "fauna") return faunaDetailOf(trimmed) || "misc";
+    if (group === "minerals") return mineralDetailOf(types, trimmed);
     if (group === "misc") {
-      if (/^(Bowl|Wooden Bowl|Cast Iron|Chalice|Cup|Fancy Cup|Fancy Goblet|Fancy Ladle|Fancy Mug|Fancy Plate|Fork|Goblet|Knife|Ladle|Mug|Plate|Spoon)$/i.test(trimmed)) {
+      if (
+        /^(Bowl|Wooden Bowl|Cast Iron|Chalice|Cup|Fancy Cup|Fancy Goblet|Fancy Ladle|Fancy Mug|Fancy Plate|Fork|Goblet|Knife|Ladle|Mug|Plate|Spoon|Rolling Pin|Tankard)$/i.test(trimmed)
+      ) {
         return "dishes";
       }
-      if (/^Toy\b/i.test(trimmed)) return "toys";
+      if (/^Toy\b/i.test(trimmed) || /^War Piece\b/i.test(trimmed)) return "toys";
       if (/Tome$/i.test(trimmed) || /Teleportation Scroll$/i.test(trimmed)) return "tomes";
-      return "junk";
+      if (/Sap$/i.test(trimmed)) return "sap";
+      return "misc";
     }
     return "";
   }
@@ -588,7 +683,6 @@
     var trimmed = String(name || "").trim();
     if (set.Sauce || set.Oil || sauceKindOf(name)) return true;
     if (/^Guacamole$/i.test(trimmed)) return true;
-    if (/^Yeast$/i.test(trimmed) || set.Yeast) return true;
     if (/^(Mashed Peas|Mashed Potatoes|Mashed Sweet Potato|Baba Ghanoush|Aguamiel)$/i.test(trimmed)) return true;
     return false;
   }
@@ -607,7 +701,7 @@
     return / Powder$/i.test(trimmed)
       || / Flour$/i.test(trimmed)
       || /^Flour$/i.test(trimmed)
-      || /^(Salt|Pink Salt|Sugar|Bone Meal|Ground Black Pepper)$/i.test(trimmed);
+      || /^(Salt|Pink Salt|Sugar|Brown Sugar|Bone Meal|Ground Black Pepper)$/i.test(trimmed);
   }
 
   function isIngredientSeed(name) {
@@ -624,13 +718,14 @@
     return false;
   }
 
-  function brewGroupOf(types) {
+  function brewGroupOf(types, name) {
     var set = typeSet(types);
+    var trimmed = String(name || "").trim();
+    if (/^(Lemonade|Limeade)$/i.test(trimmed)) return "juice";
     if (set.Juice) return "juice";
     if (set.Tea) return "tea";
     if (set.Coffee) return "coffee";
-    if (set.Alcohol || set.Spirit) return "alcohol";
-    if (set.Mixed) return "mix-drinks";
+    if (set.Alcohol || set.Spirit || set.Mixed) return "alcohol";
     return "";
   }
 
@@ -665,15 +760,17 @@
 
   function foodGroupOf(types, name) {
     var set = typeSet(types);
+    var trimmed = String(name || "").trim();
     if (isSauceItem(types, name)) return "sauces";
-    if (/^Scrambled Egg$/i.test(String(name || "").trim())) return "meats";
+    if (/^Tofu$/i.test(trimmed)) return "entrees";
+    if (/^Scrambled Egg$/i.test(trimmed)) return "meats";
     if (isRefriedBeans(name)) return "entrees";
     if (isGroundMeat(name)) return "meats";
     if (hasAny(set, ["Entree", "Sushi", "Noodle", "Rice", "Soup", "Stew", "Toast"])) return "entrees";
     if (hasAny(set, ["Dessert", "Cookie", "Pie", "Candy", "Popsicle"])) return "desserts";
     if (hasAny(set, ["Meats", "Meat", "Sausage", "Seafood", "Egg"])) return "meats";
     if (set.Bread) return "breads";
-    if (set.Cheese || set.Milk) return "dairy";
+    if (set.Cheese || set.Milk || /^(Milk|Buttermilk)$/i.test(trimmed)) return "dairy";
     if (set.Millable || set.Milled || set.Consumable) return "ingredients";
     return "";
   }
@@ -864,7 +961,7 @@
       var types = item.types || [];
       var family = armorFamilyOf(types, item.name);
       var categoryValue = categorize(types, item.name);
-      var craftValue = isCraftable(types) ? "craftable" : "gatherable";
+      var craftValue = isCraftable(types, item.name) ? "craftable" : "gatherable";
       var branch = "";
       var groupValue = "";
       var detailValue = "";
@@ -904,7 +1001,7 @@
             groupValue = potionGroupOf(types, item.name) || groupMatch(POTION_GROUPS, types);
             detailValue = potionDetailOf(groupValue, types);
           } else if (branch === "brews") {
-            groupValue = brewGroupOf(types) || groupMatch(BREW_GROUPS, types);
+            groupValue = brewGroupOf(types, item.name) || groupMatch(BREW_GROUPS, types);
           }
         }
       }
@@ -1063,8 +1160,7 @@
           { value: "currency", label: "Currency" },
           { value: "flora", label: "Flora" },
           { value: "fauna", label: "Fauna" },
-          { value: "gems", label: "Gems" },
-          { value: "ore", label: "Ore" },
+          { value: "minerals", label: "Minerals" },
           { value: "misc", label: "Misc" }
         ], gatherGroup);
       }
@@ -1072,6 +1168,7 @@
       if (craft === "gatherable" && gatherGroup === "flora") {
         appendTaxRow("Flora type", "gatherDetail", [
           { value: "all", label: "All" },
+          { value: "flowers", label: "Flowers" },
           { value: "fruits", label: "Fruits" },
           { value: "vegetables", label: "Vegetables" },
           { value: "fungi", label: "Fungi" },
@@ -1086,7 +1183,17 @@
           { value: "meats", label: "Meats" },
           { value: "guts", label: "Guts" },
           { value: "bones", label: "Bones" },
+          { value: "pelts", label: "Pelts" },
           { value: "critters", label: "Critters" },
+          { value: "misc", label: "Misc" }
+        ], gatherDetail);
+      }
+
+      if (craft === "gatherable" && gatherGroup === "minerals") {
+        appendTaxRow("Mineral type", "gatherDetail", [
+          { value: "all", label: "All" },
+          { value: "gems", label: "Gems" },
+          { value: "ore", label: "Ore" },
           { value: "misc", label: "Misc" }
         ], gatherDetail);
       }
@@ -1097,7 +1204,8 @@
           { value: "dishes", label: "Dishes" },
           { value: "toys", label: "Toys" },
           { value: "tomes", label: "Tomes" },
-          { value: "junk", label: "Junk" }
+          { value: "sap", label: "Sap" },
+          { value: "misc", label: "Misc" }
         ], gatherDetail);
       }
 
