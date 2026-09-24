@@ -745,6 +745,14 @@ th {
   line-height: 1.45;
 }
 
+.attr-tooltip__note {
+  margin-top: 0.55rem !important;
+  color: var(--gold);
+  font-size: 0.88rem !important;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
 .page-links {
   display: flex;
   flex-wrap: wrap;
