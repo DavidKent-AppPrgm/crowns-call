@@ -748,7 +748,23 @@ th {
 .page-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
+  align-items: center;
+  gap: 0.85rem 2.75rem;
+}
+
+.page-links a + a {
+  position: relative;
+  padding-left: 2.75rem;
+}
+
+.page-links a + a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 1px;
+  background: var(--line-strong);
 }
 
 @keyframes attr-rise {
