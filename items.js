@@ -39,19 +39,27 @@
   ];
 
   var FRUIT_NAMES = {
-    "Green Apple": true,
-    "Red Apple": true,
     "Apricot": true,
     "Avocado": true,
     "Banana": true,
+    "Blackberry": true,
+    "Blueberry": true,
     "Buckeye": true,
+    "Cantaloupe": true,
     "Cherry": true,
     "Chestnut": true,
     "Coconut": true,
+    "Cranberry": true,
+    "Dragon Fruit": true,
     "Fig": true,
     "Gooseberry": true,
     "Grapefruit": true,
+    "Green Apple": true,
+    "Green Grapes": true,
+    "Guava": true,
     "Hazelnut": true,
+    "Honeydew Melon": true,
+    "Kiwi": true,
     "Lemon": true,
     "Lime": true,
     "Lychee": true,
@@ -63,13 +71,93 @@
     "Passion Fruit": true,
     "Peach": true,
     "Pear": true,
+    "Pineapple": true,
     "Pinecone": true,
     "Pistachio": true,
     "Plum": true,
     "Pomegranate": true,
+    "Purple Grapes": true,
+    "Raspberry": true,
+    "Red Apple": true,
+    "Red Grapes": true,
     "Samaras": true,
     "Star Fruit": true,
-    "Walnut": true
+    "Strawberry": true,
+    "Walnut": true,
+    "Watermelon": true
+  };
+
+  var VEGETABLE_NAMES = {
+    "Banana Pepper": true,
+    "Beet": true,
+    "Black Bean": true,
+    "Broccoli": true,
+    "Cabbage": true,
+    "Cactus": true,
+    "Carrot": true,
+    "Cattail": true,
+    "Cauliflower": true,
+    "Cayenne Pepper": true,
+    "Chickpea": true,
+    "Chili Pepper": true,
+    "Cucumber": true,
+    "Eggplant": true,
+    "Garlic": true,
+    "Ghost Pepper": true,
+    "Green Bean": true,
+    "Green Bell Pepper": true,
+    "Green Onion": true,
+    "Habanero": true,
+    "Jalapeño": true,
+    "Kidney Bean": true,
+    "Leek": true,
+    "Lettuce": true,
+    "Okra": true,
+    "Paprika": true,
+    "Papyrus": true,
+    "Parsnip": true,
+    "Pea": true,
+    "Pinto Bean": true,
+    "Potato": true,
+    "Pumpkin": true,
+    "Purple Onion": true,
+    "Radish": true,
+    "Red Bell Pepper": true,
+    "Red Cabbage": true,
+    "Seaweed": true,
+    "Serrano Pepper": true,
+    "Soy Bean": true,
+    "Spinach": true,
+    "Sweet Potato": true,
+    "Tomato": true,
+    "White Onion": true,
+    "Yellow Bell Pepper": true,
+    "Yellow Onion": true,
+    "Yucca": true,
+    "Zucchini": true
+  };
+
+  var FUNGI_NAMES = {
+    "Chanterelle": true,
+    "Cremini": true,
+    "Death Cap": true,
+    "Destroying Angel": true,
+    "Fly Agaric": true,
+    "Parasol": true,
+    "Portobello": true,
+    "Shitake": true,
+    "White Button": true
+  };
+
+  var GRAIN_NAMES = {
+    "Barley": true,
+    "Canola": true,
+    "Corn": true,
+    "Flax": true,
+    "Rice": true,
+    "Rye": true,
+    "Sugarcane": true,
+    "Wheat": true
   };
 
   var PLANT_NAMES = {
@@ -83,15 +171,12 @@
     "Barley": true,
     "Basil": true,
     "Bay Leaf": true,
-    "Honey": true,
     "Beet": true,
     "Belladonna": true,
-    "Green Bell Pepper": true,
-    "Red Bell Pepper": true,
-    "Yellow Bell Pepper": true,
     "Black Bean": true,
     "Black Pepper": true,
     "Blackberry": true,
+    "Blue Chrysanthemum": true,
     "Blueberry": true,
     "Bluebonnet": true,
     "Broccoli": true,
@@ -109,11 +194,6 @@
     "Chanterelle": true,
     "Chickpea": true,
     "Chili Pepper": true,
-    "Blue Chrysanthemum": true,
-    "Purple Chrysanthemum": true,
-    "Red Chrysanthemum": true,
-    "White Chrysanthemum": true,
-    "Yellow Chrysanthemum": true,
     "Cinnamon": true,
     "Cloves": true,
     "Cocoa Bean": true,
@@ -127,26 +207,26 @@
     "Cumin": true,
     "Daffodil": true,
     "Daisy": true,
-    "Elder Dandelion": true,
-    "Young Dandelion": true,
     "Death Cap": true,
     "Destroying Angel": true,
     "Dragon Fruit": true,
     "Echinacea": true,
     "Eggplant": true,
+    "Elder Dandelion": true,
     "Fenugreek": true,
     "Flax": true,
     "Fly Agaric": true,
     "Garlic": true,
     "Ghost Pepper": true,
     "Ginger": true,
-    "Green Grapes": true,
-    "Purple Grapes": true,
-    "Red Grapes": true,
     "Green Bean": true,
+    "Green Bell Pepper": true,
+    "Green Grapes": true,
+    "Green Onion": true,
     "Guava": true,
     "Habanero": true,
     "Hibiscus": true,
+    "Honey": true,
     "Honeydew Melon": true,
     "Jalapeño": true,
     "Jasmine": true,
@@ -158,13 +238,11 @@
     "Lily": true,
     "Lilypad": true,
     "Lotus": true,
+    "Mana Tulip": true,
     "Mint": true,
     "Mustard": true,
     "Okra": true,
-    "Green Onion": true,
-    "Purple Onion": true,
-    "White Onion": true,
-    "Yellow Onion": true,
+    "Orange Tulip": true,
     "Oregano": true,
     "Paprika": true,
     "Papyrus": true,
@@ -174,6 +252,7 @@
     "Pea": true,
     "Peanut": true,
     "Pineapple": true,
+    "Pink Tulip": true,
     "Pinto Bean": true,
     "Poison Ivy": true,
     "Poison Oak": true,
@@ -181,8 +260,15 @@
     "Portobello": true,
     "Potato": true,
     "Pumpkin": true,
+    "Purple Chrysanthemum": true,
+    "Purple Grapes": true,
+    "Purple Onion": true,
     "Radish": true,
     "Raspberry": true,
+    "Red Bell Pepper": true,
+    "Red Chrysanthemum": true,
+    "Red Grapes": true,
+    "Red Tulip": true,
     "Rice": true,
     "Rose": true,
     "Rosemary": true,
@@ -200,12 +286,6 @@
     "Sweet Potato": true,
     "Thyme": true,
     "Tomato": true,
-    "Mana Tulip": true,
-    "Orange Tulip": true,
-    "Pink Tulip": true,
-    "Red Tulip": true,
-    "White Tulip": true,
-    "Yellow Tulip": true,
     "Tumbleweed": true,
     "Tumeric": true,
     "Vanilla": true,
@@ -214,9 +294,18 @@
     "Watermelon": true,
     "Wheat": true,
     "White Button": true,
+    "White Chrysanthemum": true,
+    "White Onion": true,
+    "White Tulip": true,
+    "Yellow Bell Pepper": true,
+    "Yellow Chrysanthemum": true,
+    "Yellow Onion": true,
+    "Yellow Tulip": true,
+    "Young Dandelion": true,
     "Yucca": true,
     "Zucchini": true
   };
+
 
 
   var FOOD_GROUPS = [
@@ -328,7 +417,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=fix1")
+  fetch("data/items.json?v=flora1")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -414,25 +503,61 @@
     return "misc";
   }
 
+  var FAUNA_FISH = {
+    Bass: true, Clam: true, Cod: true, Crab: true, "Freshwater Eel": true, "Gold Fish": true,
+    Herring: true, Lobster: true, Mackerel: true, Mussels: true, Octopus: true, Salmon: true,
+    "Saltwater Eel": true, Shrimp: true, Squid: true, Starfish: true, Trout: true, Tuna: true
+  };
+
+  function faunaDetailOf(name) {
+    var trimmed = String(name || "").trim();
+    if (/Antler/i.test(trimmed) || /\bBones?\b/i.test(trimmed) || /Skull/i.test(trimmed)) return "bones";
+    if (/^(Animal Guts|Animal Fat|Brain|Eyeball|Heart|Tail)$/i.test(trimmed)) return "guts";
+    if (/^Raw .+ Meat$/i.test(trimmed) || FAUNA_FISH[trimmed] || /^Frog Legs$/i.test(trimmed) || / Snake$/i.test(trimmed)) {
+      return "meats";
+    }
+    if (/^(Ladybug|Silkworm|Worm)$/i.test(trimmed) || /Jellyfish$/i.test(trimmed)) return "critters";
+    if (/Hide$/i.test(trimmed) || /Pelt$/i.test(trimmed) || /^Feather$/i.test(trimmed) || /Head$/i.test(trimmed) || /^Head of /i.test(trimmed)) {
+      return "misc";
+    }
+    return "";
+  }
+
+  function floraDetailOf(types, name) {
+    var set = typeSet(types);
+    var trimmed = String(name || "").trim();
+    if (FRUIT_NAMES[trimmed] || /^Coconut Meat$/i.test(trimmed)) return "fruits";
+    if (VEGETABLE_NAMES[trimmed]) return "vegetables";
+    if (FUNGI_NAMES[trimmed]) return "fungi";
+    if (GRAIN_NAMES[trimmed]) return "grain";
+    if (PLANT_NAMES[trimmed] || set.Millable) return "misc";
+    return "";
+  }
+
   function gatherGroupOf(types, name) {
     var set = typeSet(types);
     var trimmed = String(name || "").trim();
     if (set.Coin || /Coin/i.test(trimmed)) return "currency";
     if (set.Gem) return "gems";
     if (/\bOre\b/i.test(trimmed)) return "ore";
-    if (FRUIT_NAMES[trimmed]) return "fruits";
-    if (PLANT_NAMES[trimmed] || set.Millable) return "plants";
+    if (faunaDetailOf(trimmed)) return "fauna";
+    if (floraDetailOf(types, trimmed)) return "flora";
     return "misc";
   }
 
   function gatherDetailOf(group, types, name) {
-    if (group !== "misc") return "";
     var trimmed = String(name || "").trim();
-    if (/^(Bowl|Wooden Bowl|Cast Iron|Chalice|Cup|Fancy Cup|Fancy Goblet|Fancy Ladle|Fancy Mug|Fancy Plate|Fork|Goblet|Knife|Ladle|Mug|Plate|Spoon)$/i.test(trimmed)) {
-      return "dishes";
+    if (group === "flora") return floraDetailOf(types, trimmed) || "misc";
+    if (group === "fauna") return faunaDetailOf(trimmed) || "misc";
+    if (group === "misc") {
+      if (/^(Bowl|Wooden Bowl|Cast Iron|Chalice|Cup|Fancy Cup|Fancy Goblet|Fancy Ladle|Fancy Mug|Fancy Plate|Fork|Goblet|Knife|Ladle|Mug|Plate|Spoon)$/i.test(trimmed)) {
+        return "dishes";
+      }
+      if (/^Toy\b/i.test(trimmed)) return "toys";
+      if (/Tome$/i.test(trimmed) || /Teleportation Scroll$/i.test(trimmed)) return "tomes";
+      return "junk";
     }
-    if (/^Toy\b/i.test(trimmed)) return "toys";
-    return "junk";
+    return "";
   }
 
   function toolKindOf(types, name) {
@@ -936,12 +1061,34 @@
         appendTaxRow("Gathered type", "gatherGroup", [
           { value: "all", label: "All" },
           { value: "currency", label: "Currency" },
-          { value: "fruits", label: "Fruits" },
-          { value: "plants", label: "Plants" },
+          { value: "flora", label: "Flora" },
+          { value: "fauna", label: "Fauna" },
           { value: "gems", label: "Gems" },
           { value: "ore", label: "Ore" },
           { value: "misc", label: "Misc" }
         ], gatherGroup);
+      }
+
+      if (craft === "gatherable" && gatherGroup === "flora") {
+        appendTaxRow("Flora type", "gatherDetail", [
+          { value: "all", label: "All" },
+          { value: "fruits", label: "Fruits" },
+          { value: "vegetables", label: "Vegetables" },
+          { value: "fungi", label: "Fungi" },
+          { value: "grain", label: "Grain" },
+          { value: "misc", label: "Misc" }
+        ], gatherDetail);
+      }
+
+      if (craft === "gatherable" && gatherGroup === "fauna") {
+        appendTaxRow("Fauna type", "gatherDetail", [
+          { value: "all", label: "All" },
+          { value: "meats", label: "Meats" },
+          { value: "guts", label: "Guts" },
+          { value: "bones", label: "Bones" },
+          { value: "critters", label: "Critters" },
+          { value: "misc", label: "Misc" }
+        ], gatherDetail);
       }
 
       if (craft === "gatherable" && gatherGroup === "misc") {
@@ -949,6 +1096,7 @@
           { value: "all", label: "All" },
           { value: "dishes", label: "Dishes" },
           { value: "toys", label: "Toys" },
+          { value: "tomes", label: "Tomes" },
           { value: "junk", label: "Junk" }
         ], gatherDetail);
       }
