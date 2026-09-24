@@ -77,6 +77,7 @@
       { value: "paste", label: "Paste" },
       { value: "syrup", label: "Syrup" },
       { value: "hot-sauce", label: "Hot Sauce" },
+      { value: "oil", label: "Oil" },
       { value: "misc", label: "Misc" }
     ],
     ingredients: [
@@ -85,36 +86,47 @@
     ]
   };
 
+  // Alchemy potion folders (Unity Prefabs/.../Alchemy): Protection, Attribute (+ vial/elixir/potions/flask),
+  // Magic (+ mastery/resist), Immunities, Poison. Brews/reagents stay as sibling alchemy groups.
   var POTION_GROUPS = [
-    { value: "potions", label: "Potions", types: ["Potion", "Potions", "Flask", "Vial", "Elixir"] },
-    { value: "brews", label: "Brews", types: ["Brew", "Juice", "Tea", "Coffee", "Alcohol", "Spirit"] },
-    { value: "attributes", label: "Attributes", types: ["Attribute"] },
-    { value: "masteries", label: "Masteries", types: ["Mastery"] },
-    { value: "resists", label: "Resists", types: ["Resist"] },
+    { value: "protection", label: "Protection Potion", types: ["Skin"] },
+    { value: "attribute", label: "Attribute Potion", types: ["Attribute", "Vial", "Elixir", "Potions", "Flask"] },
+    { value: "magic", label: "Magic Potion", types: ["Magic", "Mastery", "Resist"] },
     { value: "immunities", label: "Immunities", types: ["Immunity"] },
-    { value: "skins", label: "Skins", types: ["Skin"] },
-    { value: "magics", label: "Magic", types: ["Magic"] },
-    { value: "poisons", label: "Poisons", types: ["Poison", "Venom"] },
-    { value: "remedies", label: "Remedies", types: ["Oil"] },
+    { value: "poison", label: "Poison", types: ["Poison", "Venom"] },
+    { value: "brews", label: "Brews", types: ["Brew", "Juice", "Tea", "Coffee", "Alcohol", "Spirit"] },
     { value: "reagents", label: "Reagents", types: ["Pigment", "Inscription"] }
   ];
+
+  var POTION_DETAILS = {
+    attribute: [
+      { value: "vial", label: "Vials" },
+      { value: "elixir", label: "Elixirs" },
+      { value: "potions", label: "Potions" },
+      { value: "flask", label: "Flasks" }
+    ],
+    magic: [
+      { value: "mastery", label: "Mastery" },
+      { value: "resist", label: "Resist" }
+    ]
+  };
 
   var PREPARED_FOOD_TYPES = [
     "Entree", "Sushi", "Noodle", "Rice", "Dessert", "Cookie", "Pie", "Candy", "Popsicle",
     "Toast", "Meats", "Meat", "Sausage", "Seafood", "Egg", "Soup", "Stew", "Sauce",
-    "Bread", "Cheese", "Milk", "Milled"
+    "Bread", "Cheese", "Milk", "Milled", "Oil"
   ];
 
   var PREPARED_POTION_TYPES = [
     "Potion", "Potions", "Flask", "Vial", "Elixir", "Brew", "Juice", "Tea", "Coffee",
     "Alcohol", "Spirit", "Attribute", "Mastery", "Resist", "Immunity", "Skin", "Magic",
-    "Poison", "Venom", "Oil", "Pigment", "Inscription"
+    "Poison", "Venom", "Pigment", "Inscription"
   ];
 
   var CRAFT_MARKERS = {
     Metal: true, Cloth: true, Leather: true, Mail: true, Plate: true, Ingot: true,
     Milled: true, Inscription: true, Weapon: true, Armor: true, Tool: true, Bag: true,
-    Bow: true, Crossbow: true, Arrow: true, Splint: true, Bandage: true,
+    Bow: true, Crossbow: true, Arrow: true, Splint: true, Bandage: true, Oil: true,
     Linen: true, Wool: true, Cotton: true, Lace: true, Silk: true, Satin: true,
     Denim: true, Polyester: true, Fleece: true
   };
@@ -123,7 +135,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=food2")
+  fetch("data/items.json?v=alc1")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -211,12 +223,13 @@
     if (/ Paste$/i.test(trimmed) || /^Paste$/i.test(trimmed)) return "paste";
     if (/ Syrup$/i.test(trimmed) || /^Syrup$/i.test(trimmed)) return "syrup";
     if (/ Hot Sauce$/i.test(trimmed) || /^Hot Sauce$/i.test(trimmed)) return "hot-sauce";
+    if (/ Oil$/i.test(trimmed) || /^Oil$/i.test(trimmed)) return "oil";
     return "";
   }
 
   function isSauceItem(types, name) {
     var set = typeSet(types);
-    return !!(set.Sauce || sauceKindOf(name));
+    return !!(set.Sauce || set.Oil || sauceKindOf(name));
   }
 
   function isIngredientPowder(name) {
@@ -293,12 +306,48 @@
       return "cooked";
     }
     if (group === "sauces") {
+      if (set.Oil) return "oil";
       return sauceKindOf(name) || "misc";
     }
     if (group === "ingredients") {
       return isIngredientPowder(itemName) ? "powders" : "misc";
     }
     return "";
+  }
+
+  function potionGroupOf(types) {
+    var set = typeSet(types);
+    if (set.Skin) return "protection";
+    if (set.Attribute || set.Vial || set.Elixir || set.Potions || set.Flask) return "attribute";
+    if (set.Magic || set.Mastery || set.Resist) return "magic";
+    if (set.Immunity) return "immunities";
+    if (set.Poison || set.Venom) return "poison";
+    if (hasAny(set, ["Brew", "Juice", "Tea", "Coffee", "Alcohol", "Spirit"])) return "brews";
+    if (set.Pigment || set.Inscription) return "reagents";
+    return "";
+  }
+
+  function potionDetailOf(group, types) {
+    var set = typeSet(types);
+    var key = String(group || "").replace(/-potion$/, "");
+    if (key === "attribute") {
+      if (set.Vial) return "vial";
+      if (set.Elixir) return "elixir";
+      if (set.Potions) return "potions";
+      if (set.Flask) return "flask";
+      return "";
+    }
+    if (key === "magic") {
+      if (set.Mastery) return "mastery";
+      if (set.Resist) return "resist";
+      return "";
+    }
+    return "";
+  }
+
+  function potionDetailsFor(group) {
+    var key = String(group || "").replace(/-potion$/, "");
+    return POTION_DETAILS[key] || null;
   }
 
   function materialOf(types, name) {
@@ -424,13 +473,15 @@
         } else if (consumableMaps.potions[key]) {
           branch = "potions";
           groupValue = consumableMaps.potions[key];
+          detailValue = potionDetailOf(groupValue, types);
         } else {
           branch = consumableBranchOf(types, item.name);
           if (branch === "food") {
             groupValue = foodGroupOf(types, item.name);
             detailValue = foodDetailOf(groupValue, types, item.name);
           } else if (branch === "potions") {
-            groupValue = groupMatch(POTION_GROUPS, types);
+            groupValue = potionGroupOf(types) || groupMatch(POTION_GROUPS, types);
+            detailValue = potionDetailOf(groupValue, types);
           }
         }
       }
@@ -642,6 +693,10 @@
 
       if (craft !== "all" && category === "consumables" && consumableBranch === "potions") {
         appendTaxRow("Alchemy", "consumableGroup", [{ value: "all", label: "All potions" }].concat(potionGroupOptions), consumableGroup);
+      }
+
+      if (craft !== "all" && category === "consumables" && consumableBranch === "potions" && potionDetailsFor(consumableGroup)) {
+        appendTaxRow("Potion type", "consumableDetail", [{ value: "all", label: "All" }].concat(potionDetailsFor(consumableGroup)), consumableDetail);
       }
     }
 
