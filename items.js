@@ -476,7 +476,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=cleanup1")
+  fetch("data/items.json?v=cleanup2")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -578,22 +578,22 @@
     if (/Antler/i.test(trimmed) || /\bBones?\b/i.test(trimmed) || /Skull/i.test(trimmed) || /Ivory/i.test(trimmed)) {
       return "bones";
     }
-    if (/^(Animal Guts|Animal Fat|Brain|Eyeball|Heart|Tail)$/i.test(trimmed)) return "guts";
-    if (/^Raw /i.test(trimmed) || FAUNA_FISH[trimmed] || /^Frog Legs$/i.test(trimmed) || / Snake$/i.test(trimmed) || /^Egg$/i.test(trimmed)) {
+    if (/^(Animal Guts|Animal Fat|Brain|Eyeball|Heart|Tail|Frog Legs)$/i.test(trimmed)) return "guts";
+    if (/^Raw /i.test(trimmed) || FAUNA_FISH[trimmed] || /^Egg$/i.test(trimmed)) {
       return "meats";
     }
-    if (/Pelt$/i.test(trimmed)) return "pelts";
+    if (/Pelt$/i.test(trimmed) || /Hide$/i.test(trimmed)) return "pelts";
     if (
       /^(Ladybug|Silkworm|Worm|Bee|Beetle|Black Ant|Red Ant|Caterpillar|Dragonfly|Firefly|Fly|Scorpion|Snail)$/i.test(trimmed)
       || /Jellyfish$/i.test(trimmed)
       || /Butterfly$/i.test(trimmed)
       || /Spider$/i.test(trimmed)
+      || / Snake$/i.test(trimmed)
     ) {
       return "critters";
     }
     if (
-      /Hide$/i.test(trimmed)
-      || /^Feather$/i.test(trimmed)
+      /^Feather$/i.test(trimmed)
       || /Head$/i.test(trimmed)
       || /^Head of /i.test(trimmed)
       || /^Wool$/i.test(trimmed)
@@ -647,7 +647,13 @@
       ) {
         return "dishes";
       }
-      if (/^Toy\b/i.test(trimmed) || /^War Piece\b/i.test(trimmed)) return "toys";
+      if (
+        /^Toy\b/i.test(trimmed)
+        || /^War Piece\b/i.test(trimmed)
+        || /^(Snow Globe|Dreamcatcher|Dream Catcher|Hourglass)$/i.test(trimmed)
+      ) {
+        return "toys";
+      }
       if (/Tome$/i.test(trimmed) || /Teleportation Scroll$/i.test(trimmed)) return "tomes";
       if (/Sap$/i.test(trimmed)) return "sap";
       return "misc";
@@ -1183,7 +1189,7 @@
           { value: "meats", label: "Meats" },
           { value: "guts", label: "Guts" },
           { value: "bones", label: "Bones" },
-          { value: "pelts", label: "Pelts" },
+          { value: "pelts", label: "Pelts & Hides" },
           { value: "critters", label: "Critters" },
           { value: "misc", label: "Misc" }
         ], gatherDetail);
