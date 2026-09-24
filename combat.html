@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Combat — Crown's Call</title>
-  <meta name="description" content="Combat in Crown's Call today is player versus player. Dungeons are planned for later.">
+  <meta name="description" content="Combat in Crown's Call: stances, armor, and active effects that shape a fight.">
   <meta name="theme-color" content="#110e0b">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=cleanup2">
+  <link rel="stylesheet" href="styles.css?v=combat1">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -48,30 +48,110 @@
       <article class="prose">
         <p class="eyebrow kicker">Wiki</p>
         <h1>Combat</h1>
-        <p>The fighting in the game today is player versus player. You fight in person, with a weapon in either hand, inside a stance. Magic sits in the same fight as steel. Armor is worn piece by piece.</p>
-
-        <div class="callout">
-          <p><strong>Dungeons are later.</strong> Player-versus-environment dungeons are part of the plan for Crown's Call. They are not in the build yet, so this page describes the player-versus-player fighting that exists now.</p>
-        </div>
-
-        <h2>Vitals</h2>
-        <ul class="stat-list">
-          <li><strong>Health</strong> How much harm you can take.</li>
-          <li><strong>Stamina</strong> The store you spend on effort.</li>
-          <li><strong>Mana</strong> The store you spend on magic.</li>
-        </ul>
-
-        <h2>Attributes</h2>
-        <p>Nine attributes sit under those vitals. Strength, Toughness, and Constitution. Agility, Dexterity, and Endurance. Intelligence, Wisdom, and Spirit. Starting attribute points are listed on the <a href="peoples.html">Peoples</a> page.</p>
+        <p>Fight to defend your people, or fight alongside them. Fighting is in person, with a weapon in either hand.</p>
 
         <h2>Stances and hands</h2>
-        <p>A stance is a way of fighting. It holds the abilities you can use, including the chains for the left hand and the right. Changing stance changes which motions are available. Items held in the hands follow that stance.</p>
+        <p>A stance is a way of fighting. It holds the abilities you can use, including the combos for the left and right hands. Changing stance changes which motions are available. The items in the character's hands decide which stance that character is in. Utilize both weapons in each hand together to create crazy combos. Mix two magic types together, or use two of the same one for twice the power. Couple your magical attacks with accompanying physical attacks, or shoot magic right out of a bow. The combinations are endless.</p>
 
         <h2>What you can wear</h2>
-        <p>Armor and jewelry occupy their own places on the body: head, neck, ears, shoulders, gloves, bracers, rings, torso, back, leggings, and boots. The two hands carry what you fight with.</p>
-
+        <p>Armor is worn piece by piece. Armor and jewelry occupy their own places on the body: head, neck, ears, shoulders, gloves, bracers, rings, torso, back, leggings, and boots. The two hands carry what you fight with.</p>
+        <p>Each piece of armor protects a different part of the body. Armor takes damage and breaks independently. Your character takes damage based on which part of the body is hit. If you are hit in a part of the body that is unguarded by armor, you will take damage.</p>
         <div class="note">
-          <strong>Conditions.</strong> A body can also be slowed by the world around it. Cold, wet, and frozen are tracked states, along with stealth and other effects. Individual spells will get their own entries when their names and costs are fixed.
+          <strong>WATCH OUT!</strong> Some abilities have armor piercing and will ignore armor, but they won't damage your armor.
+        </div>
+
+        <h2>Active Effects</h2>
+        <p>Certain conditions can cause active effects on a character. These effects can inhibit and harm the character in the world.</p>
+
+        <div class="effect-list">
+          <article class="effect-card">
+            <h3>None</h3>
+            <p>Acts as normal, no changes.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Stasis</h3>
+            <p>No gravity on rigidbody. Cannot move. Cannot be moved. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Paralysis</h3>
+            <p>Responds to gravity. Cannot move, but can be moved. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Frozen</h3>
+            <p>Responds to gravity. Cannot move. Cannot be moved. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Wet</h3>
+            <p>Small decrease of Agility. If the character has both Cold and Wet, then they are Frozen.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Cold</h3>
+            <p>Small decrease of Endurance. If the character has both Cold and Wet, then they are Frozen.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Petrified</h3>
+            <p>Responds to gravity. Cannot move. Cannot be moved. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Banished</h3>
+            <p>No gravity. Cannot move. Cannot be moved. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Rooted</h3>
+            <p>Responds to gravity. Cannot move. Cannot be moved.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Stunned</h3>
+            <p>Responds to gravity. Cannot move. Cannot be moved. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Weighted</h3>
+            <p>Increases the mass on rigidbody by 10%.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Slowed</h3>
+            <p>Decrease Agility by 20%.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Dazed</h3>
+            <p>Decrease Agility by 50%.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Confused</h3>
+            <p>For players, the forward key <kbd>W</kbd> acts backwards, and the backwards key <kbd>S</kbd> acts forward. The same swap applies to the other directions: the left key <kbd>A</kbd> acts like right, and the right key <kbd>D</kbd> acts like left. AI confusion is still being worked out.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Charmed</h3>
+            <p>Responds to gravity. Cannot move. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Fear</h3>
+            <p>Responds to gravity. Cannot move. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Frenzy</h3>
+            <p>Responds to gravity. Cannot move.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Stagger</h3>
+            <p>Responds to gravity. Cannot move. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Sleep</h3>
+            <p>Responds to gravity. Cannot move. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Polymorph</h3>
+            <p>Responds to gravity. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Knockdown</h3>
+            <p>Responds to gravity. Cannot move. Cannot attack or use any abilities.</p>
+          </article>
+          <article class="effect-card">
+            <h3>Blinded</h3>
+            <p>Reduced vision.</p>
+          </article>
         </div>
       </article>
     </div>
@@ -84,6 +164,6 @@
       <a href="https://github.com/DavidKent-AppPrgm/crowns-call">Source</a>
     </nav>
   </footer>
-  <script src="site.js?v=cleanup2"></script>
+  <script src="site.js?v=combat1"></script>
 </body>
 </html>
