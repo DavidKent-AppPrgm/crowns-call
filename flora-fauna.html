@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Person — Crown's Call</title>
-  <meta name="description" content="An NPC from the Crown's Call kingdom.">
+  <title>Flora &amp; Fauna — Crown's Call</title>
+  <meta name="description" content="Flora and fauna in Crown's Call: plants, trees, and animals of the generated world.">
   <meta name="theme-color" content="#110e0b">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=peoples4">
+  <link rel="stylesheet" href="styles.css?v=flora-fauna1">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -39,14 +39,29 @@
       <nav class="wiki-nav" aria-label="Wiki">
         <a href="wiki.html">Overview</a>
         <a href="world.html">The World</a>
-        <a href="flora-fauna.html">Flora &amp; Fauna</a>
+        <a href="flora-fauna.html" aria-current="page">Flora &amp; Fauna</a>
         <a href="craft.html">Crafting & Building</a>
         <a href="all-items.html">Items</a>
-        <a href="peoples.html" aria-current="page">Peoples</a>
+        <a href="peoples.html">Peoples</a>
         <a href="combat.html">Combat</a>
       </nav>
-      <article class="prose person-sheet" data-person-sheet>
-        <p>Loading person…</p>
+      <article class="prose">
+        <p class="eyebrow kicker">Wiki</p>
+        <h1>Flora &amp; Fauna</h1>
+        <p>The generated world is filled with plants, trees, and animals. Open Flora for the plant library, or Fauna for the animals that share that ground.</p>
+
+        <div class="card-grid">
+          <a class="card" href="flora.html">
+            <h3>Flora</h3>
+            <p>Trees, fruits, and gathered plants on the generated world.</p>
+            <span>Open</span>
+          </a>
+          <a class="card" href="bestiary.html">
+            <h3>Fauna</h3>
+            <p>Mammals, birds, fish, and reptiles, plus friendly and enemy people.</p>
+            <span>Open</span>
+          </a>
+        </div>
       </article>
     </div>
   </main>
@@ -58,7 +73,6 @@
       <a href="https://github.com/DavidKent-AppPrgm/crowns-call">Source</a>
     </nav>
   </footer>
-  <script src="site.js?v=peoples4"></script>
-  <script src="people.js?v=peoples4"></script>
+  <script src="site.js?v=flora-fauna1"></script>
 </body>
 </html>
