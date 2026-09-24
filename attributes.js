@@ -10,62 +10,74 @@
     health: {
       pool: "major",
       name: "Health",
-      blurb: "How much harm you can take before you fall."
+      blurb: "How much harm you can take before you fall.",
+      note: "Health Points"
     },
     stamina: {
       pool: "major",
       name: "Stamina",
-      blurb: "The store you spend on effort, movement, and physical work."
+      blurb: "How much energy you have to spend on movement.",
+      note: "Stamina Points"
     },
     mana: {
       pool: "major",
       name: "Mana",
-      blurb: "The store you spend on magic and spellcraft."
+      blurb: "The amount of power you have to cast magical abilities.",
+      note: "Mana Points"
     },
     strength: {
       pool: "minor",
       name: "Strength",
-      blurb: "How hard your blows land and how much force you can put behind them."
+      blurb: "How hard your blows land and how much force you can put behind them.",
+      note: "Physical Damage Dealt"
     },
     toughness: {
       pool: "minor",
       name: "Toughness",
-      blurb: "How well you shrug off hits and keep fighting through damage."
+      blurb: "How well you shrug off hits and keep fighting through damage.",
+      note: "Damage Reduction"
     },
     constitution: {
       pool: "minor",
       name: "Constitution",
-      blurb: "How hardy your body stays under strain, poison, and wear."
+      blurb: "How hardy your body stays under strain, poison, and wear.",
+      note: "Health Regeneration"
     },
     agility: {
       pool: "minor",
       name: "Agility",
-      blurb: "How quickly you move, dodge, and react in a fight."
+      blurb: "How quickly you move, dodge, and react in a fight.",
+      note: "Movement Speed"
     },
     dexterity: {
       pool: "minor",
       name: "Dexterity",
-      blurb: "How precisely you handle weapons, tools, and fine work."
+      blurb: "How precisely you handle weapons, tools, and fine work.",
+      note: "Physical Attack Speed"
     },
     endurance: {
       pool: "minor",
       name: "Endurance",
-      blurb: "How long you can keep effort going before stamina runs out."
+      blurb: "How long you can keep effort going before stamina runs out.",
+      note: "Stamina Regeneration"
     },
     intelligence: {
       pool: "minor",
       name: "Intelligence",
-      blurb: "How sharply you learn, plan, and shape magic."
+      blurb: "How sharply you learn, plan, and shape magic.",
+      note: "Magical Damage Dealt"
     },
     wisdom: {
       pool: "minor",
       name: "Wisdom",
-      blurb: "How well you judge, focus, and recover your bearings."
+      blurb: "How well you judge, focus, and recover your bearings.",
+      note: "Spell Casting Speed"
     },
     spirit: {
       pool: "minor",
       name: "Spirit",
-      blurb: "How strongly your will feeds magic and resists broken resolve."
+      blurb: "How strongly your will feeds magic and resists broken resolve.",
+      note: "Mana Regeneration"
     }
   };
 
@@ -78,6 +90,7 @@
   var tooltip = board.querySelector("[data-attr-tooltip]");
   var tooltipTitle = board.querySelector("[data-attr-tooltip-title]");
   var tooltipBlurb = board.querySelector("[data-attr-tooltip-blurb]");
+  var tooltipNote = board.querySelector("[data-attr-tooltip-note]");
   var status = board.querySelector("[data-attr-status]");
   var buttons = Array.prototype.slice.call(board.querySelectorAll("[data-attr]"));
 
@@ -138,17 +151,13 @@
     selected = key;
     tooltipTitle.textContent = attr.name;
     tooltipBlurb.textContent = attr.blurb;
+    if (tooltipNote) tooltipNote.textContent = "* " + attr.note + " *";
     placeTooltip(anchor);
-    window.clearTimeout(showTooltip.timer);
-    showTooltip.timer = window.setTimeout(function () {
-      if (tooltip) tooltip.hidden = true;
-    }, 4200);
   }
 
   function hideTooltip() {
     selected = "";
     if (tooltip) tooltip.hidden = true;
-    window.clearTimeout(showTooltip.timer);
   }
 
   function render() {
@@ -195,8 +204,12 @@
       return;
     }
     var tile = event.target.closest("[data-attr]");
-    if (!tile || !board.contains(tile)) return;
-    spend(tile.getAttribute("data-attr"), tile);
+    if (tile && board.contains(tile)) {
+      spend(tile.getAttribute("data-attr"), tile);
+      return;
+    }
+    hideTooltip();
+    render();
   });
 
   board.addEventListener("keydown", function (event) {
@@ -205,11 +218,17 @@
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       spend(tile.getAttribute("data-attr"), tile);
+    } else if (event.key === "Escape") {
+      hideTooltip();
+      render();
     }
   });
 
   document.addEventListener("click", function (event) {
-    if (!board.contains(event.target)) hideTooltip();
+    if (!board.contains(event.target)) {
+      hideTooltip();
+      render();
+    }
   });
 
   window.addEventListener("resize", function () {
