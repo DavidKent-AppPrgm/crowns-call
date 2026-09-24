@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=peoples4">
+  <link rel="stylesheet" href="styles.css?v=peoples5">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -52,11 +52,11 @@
 
         <h2>The character you create</h2>
         <p>Create the characters you want. Begin with a variety of avatar icons, appearance features, and character attributes. Everyone starts with 18 minor attribute points and 5 major attribute points.</p>
-        <p class="library-note">Try the boards below: open a stat to read what it does, spend your starting points, then refresh to rebuild.</p>
+        <p class="library-note">Try the boards below: click a stat to spend a point and read what it does. Refresh to rebuild.</p>
 
         <div class="attr-board" data-attr-board>
           <div class="attr-board__toolbar">
-            <p class="attr-board__status" data-attr-status>Select a stat to read it. Click + to spend a point, − to take one back.</p>
+            <p class="attr-board__status" data-attr-status>Click a stat to spend a point on it.</p>
             <button type="button" class="attr-reset" data-attr-reset>Refresh points</button>
           </div>
 
@@ -66,32 +66,20 @@
               <p class="attr-panel__points"><span data-attr-left="major">5</span> left</p>
             </header>
             <div class="attr-tiles attr-tiles--major" role="group" aria-label="Major attributes">
-              <button type="button" class="attr-tile attr-tile--health" data-attr="health" aria-pressed="false">
+              <button type="button" class="attr-tile attr-tile--health" data-attr="health" aria-describedby="attr-tooltip">
                 <span class="attr-tile__mark" aria-hidden="true"></span>
                 <span class="attr-tile__name">Health</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile attr-tile--stamina" data-attr="stamina" aria-pressed="false">
+              <button type="button" class="attr-tile attr-tile--stamina" data-attr="stamina" aria-describedby="attr-tooltip">
                 <span class="attr-tile__mark" aria-hidden="true"></span>
                 <span class="attr-tile__name">Stamina</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile attr-tile--mana" data-attr="mana" aria-pressed="false">
+              <button type="button" class="attr-tile attr-tile--mana" data-attr="mana" aria-describedby="attr-tooltip">
                 <span class="attr-tile__mark" aria-hidden="true"></span>
                 <span class="attr-tile__name">Mana</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
             </div>
           </section>
@@ -102,93 +90,49 @@
               <p class="attr-panel__points"><span data-attr-left="minor">18</span> left</p>
             </header>
             <div class="attr-tiles attr-tiles--minor" role="group" aria-label="Minor attributes">
-              <button type="button" class="attr-tile" data-attr="strength" aria-pressed="false">
+              <button type="button" class="attr-tile" data-attr="strength" aria-describedby="attr-tooltip">
                 <span class="attr-tile__name">Strength</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile" data-attr="toughness" aria-pressed="false">
+              <button type="button" class="attr-tile" data-attr="toughness" aria-describedby="attr-tooltip">
                 <span class="attr-tile__name">Toughness</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile" data-attr="constitution" aria-pressed="false">
+              <button type="button" class="attr-tile" data-attr="constitution" aria-describedby="attr-tooltip">
                 <span class="attr-tile__name">Constitution</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile" data-attr="agility" aria-pressed="false">
+              <button type="button" class="attr-tile" data-attr="agility" aria-describedby="attr-tooltip">
                 <span class="attr-tile__name">Agility</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile" data-attr="dexterity" aria-pressed="false">
+              <button type="button" class="attr-tile" data-attr="dexterity" aria-describedby="attr-tooltip">
                 <span class="attr-tile__name">Dexterity</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile" data-attr="endurance" aria-pressed="false">
+              <button type="button" class="attr-tile" data-attr="endurance" aria-describedby="attr-tooltip">
                 <span class="attr-tile__name">Endurance</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile" data-attr="intelligence" aria-pressed="false">
+              <button type="button" class="attr-tile" data-attr="intelligence" aria-describedby="attr-tooltip">
                 <span class="attr-tile__name">Intelligence</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile" data-attr="wisdom" aria-pressed="false">
+              <button type="button" class="attr-tile" data-attr="wisdom" aria-describedby="attr-tooltip">
                 <span class="attr-tile__name">Wisdom</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
-              <button type="button" class="attr-tile" data-attr="spirit" aria-pressed="false">
+              <button type="button" class="attr-tile" data-attr="spirit" aria-describedby="attr-tooltip">
                 <span class="attr-tile__name">Spirit</span>
                 <span class="attr-tile__value"><span data-attr-value>0</span></span>
-                <span class="attr-tile__controls">
-                  <span class="attr-tile__chip" data-attr-tile-sub aria-hidden="true">−</span>
-                  <span class="attr-tile__chip" data-attr-tile-add aria-hidden="true">+</span>
-                </span>
               </button>
             </div>
           </section>
 
-          <aside class="attr-detail" data-attr-detail hidden>
-            <div class="attr-detail__top">
-              <p class="eyebrow kicker" data-attr-detail-pool>Major</p>
-              <h3 data-attr-detail-title>Health</h3>
-            </div>
-            <p data-attr-detail-blurb></p>
-            <div class="attr-detail__spend">
-              <button type="button" class="attr-step" data-attr-sub aria-label="Remove one point">−</button>
-              <p class="attr-detail__value"><span data-attr-detail-value>0</span> spent</p>
-              <button type="button" class="attr-step" data-attr-add aria-label="Add one point">+</button>
-            </div>
-          </aside>
+          <div class="attr-tooltip" id="attr-tooltip" data-attr-tooltip role="tooltip" hidden>
+            <strong data-attr-tooltip-title></strong>
+            <p data-attr-tooltip-blurb></p>
+          </div>
         </div>
 
         <h2 id="npcs">Who lives in the kingdom</h2>
@@ -205,8 +149,8 @@
       <a href="https://github.com/DavidKent-AppPrgm/crowns-call">Source</a>
     </nav>
   </footer>
-  <script src="site.js?v=peoples4"></script>
-  <script src="attributes.js?v=peoples4"></script>
-  <script src="people.js?v=peoples4"></script>
+  <script src="site.js?v=peoples5"></script>
+  <script src="attributes.js?v=peoples5"></script>
+  <script src="people.js?v=peoples5"></script>
 </body>
 </html>

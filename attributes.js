@@ -1,4 +1,4 @@
-/* Peoples attribute try-out: spend pools and read what each stat does. */
+/* Peoples attribute try-out: click a stat to spend and read its tooltip. */
 (function () {
   var board = document.querySelector("[data-attr-board]");
   if (!board) return;
@@ -75,11 +75,9 @@
   var selected = "";
   var majorLeft = board.querySelector("[data-attr-left='major']");
   var minorLeft = board.querySelector("[data-attr-left='minor']");
-  var detail = board.querySelector("[data-attr-detail]");
-  var detailTitle = board.querySelector("[data-attr-detail-title]");
-  var detailBlurb = board.querySelector("[data-attr-detail-blurb]");
-  var detailValue = board.querySelector("[data-attr-detail-value]");
-  var detailPool = board.querySelector("[data-attr-detail-pool]");
+  var tooltip = board.querySelector("[data-attr-tooltip]");
+  var tooltipTitle = board.querySelector("[data-attr-tooltip-title]");
+  var tooltipBlurb = board.querySelector("[data-attr-tooltip-blurb]");
   var status = board.querySelector("[data-attr-status]");
   var buttons = Array.prototype.slice.call(board.querySelectorAll("[data-attr]"));
 
@@ -99,14 +97,63 @@
     window.clearTimeout(flashStatus.timer);
     flashStatus.timer = window.setTimeout(function () {
       status.classList.remove("is-hot");
+      updateIdleStatus();
     }, 900);
   }
 
-  function render() {
+  function updateIdleStatus() {
+    if (!status) return;
     var majorRemain = poolLeft("major");
     var minorRemain = poolLeft("minor");
-    if (majorLeft) majorLeft.textContent = String(majorRemain);
-    if (minorLeft) minorLeft.textContent = String(minorRemain);
+    if (majorRemain === 0 && minorRemain === 0) {
+      status.textContent = "All points spent. Refresh to try another build.";
+    } else {
+      status.textContent = "Click a stat to spend a point on it.";
+    }
+  }
+
+  function placeTooltip(anchor) {
+    if (!tooltip || !anchor) return;
+    var boardRect = board.getBoundingClientRect();
+    var rect = anchor.getBoundingClientRect();
+    var top = rect.bottom - boardRect.top + 10;
+    var left = rect.left - boardRect.left + rect.width / 2;
+
+    tooltip.hidden = false;
+    tooltip.style.top = top + "px";
+    tooltip.style.left = left + "px";
+
+    var tipWidth = tooltip.offsetWidth;
+    var boardWidth = board.clientWidth;
+    var minLeft = tipWidth / 2 + 8;
+    var maxLeft = boardWidth - tipWidth / 2 - 8;
+    if (left < minLeft) left = minLeft;
+    if (left > maxLeft) left = maxLeft;
+    tooltip.style.left = left + "px";
+  }
+
+  function showTooltip(key, anchor) {
+    var attr = ATTRS[key];
+    if (!attr || !tooltip) return;
+    selected = key;
+    tooltipTitle.textContent = attr.name;
+    tooltipBlurb.textContent = attr.blurb;
+    placeTooltip(anchor);
+    window.clearTimeout(showTooltip.timer);
+    showTooltip.timer = window.setTimeout(function () {
+      if (tooltip) tooltip.hidden = true;
+    }, 4200);
+  }
+
+  function hideTooltip() {
+    selected = "";
+    if (tooltip) tooltip.hidden = true;
+    window.clearTimeout(showTooltip.timer);
+  }
+
+  function render() {
+    if (majorLeft) majorLeft.textContent = String(poolLeft("major"));
+    if (minorLeft) minorLeft.textContent = String(poolLeft("minor"));
 
     buttons.forEach(function (button) {
       var key = button.getAttribute("data-attr");
@@ -114,113 +161,61 @@
       if (valueNode) valueNode.textContent = String(spent[key]);
       button.classList.toggle("is-selected", key === selected);
       button.classList.toggle("is-filled", spent[key] > 0);
-      button.setAttribute("aria-pressed", key === selected ? "true" : "false");
-      var remain = poolLeft(ATTRS[key].pool);
-      button.classList.toggle("is-blocked", remain <= 0 && spent[key] === 0);
+      button.classList.toggle("is-blocked", poolLeft(ATTRS[key].pool) <= 0);
     });
 
-    if (selected && ATTRS[selected]) {
-      var attr = ATTRS[selected];
-      detail.hidden = false;
-      detailTitle.textContent = attr.name;
-      detailBlurb.textContent = attr.blurb;
-      detailValue.textContent = String(spent[selected]);
-      detailPool.textContent = attr.pool === "major" ? "Major" : "Minor";
-      detail.dataset.pool = attr.pool;
-    } else {
-      detail.hidden = true;
-    }
-
-    if (status && !status.classList.contains("is-hot")) {
-      if (majorRemain === 0 && minorRemain === 0) {
-        status.textContent = "All points spent. Refresh to try another build.";
-      } else {
-        status.textContent = "Select a stat to read it. Click + to spend a point, − to take one back.";
-      }
-    }
+    if (!status.classList.contains("is-hot")) updateIdleStatus();
   }
 
-  function selectAttr(key) {
-    if (!ATTRS[key]) return;
-    selected = key;
-    render();
-  }
-
-  function addPoint(key) {
+  function spend(key, anchor) {
     var attr = ATTRS[key];
     if (!attr) return;
+    showTooltip(key, anchor);
     if (poolLeft(attr.pool) <= 0) {
       flashStatus("No " + attr.pool + " points left.");
+      render();
       return;
     }
     spent[key] += 1;
-    selected = key;
     flashStatus(attr.name + " +1");
     render();
-  }
-
-  function removePoint(key) {
-    var attr = ATTRS[key];
-    if (!attr || spent[key] <= 0) return;
-    spent[key] -= 1;
-    selected = key;
-    flashStatus(attr.name + " −1");
-    render();
+    placeTooltip(anchor);
   }
 
   function reset() {
     Object.keys(spent).forEach(function (key) { spent[key] = 0; });
-    selected = "";
+    hideTooltip();
     flashStatus("Points refreshed.");
     render();
   }
 
   board.addEventListener("click", function (event) {
-    var resetBtn = event.target.closest("[data-attr-reset]");
-    if (resetBtn) {
+    if (event.target.closest("[data-attr-reset]")) {
       reset();
       return;
     }
-
-    var addBtn = event.target.closest("[data-attr-add]");
-    if (addBtn) {
-      addPoint(selected || addBtn.getAttribute("data-attr-add"));
-      return;
-    }
-
-    var subBtn = event.target.closest("[data-attr-sub]");
-    if (subBtn) {
-      removePoint(selected || subBtn.getAttribute("data-attr-sub"));
-      return;
-    }
-
     var tile = event.target.closest("[data-attr]");
     if (!tile || !board.contains(tile)) return;
-    var key = tile.getAttribute("data-attr");
-    if (event.target.closest("[data-attr-tile-sub]")) {
-      removePoint(key);
-      return;
-    }
-    if (event.target.closest("[data-attr-tile-add]")) {
-      addPoint(key);
-      return;
-    }
-    selectAttr(key);
+    spend(tile.getAttribute("data-attr"), tile);
   });
 
   board.addEventListener("keydown", function (event) {
     var tile = event.target.closest("[data-attr]");
     if (!tile || !board.contains(tile)) return;
-    var key = tile.getAttribute("data-attr");
-    if (event.key === "+" || event.key === "=") {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      addPoint(key);
-    } else if (event.key === "-" || event.key === "_") {
-      event.preventDefault();
-      removePoint(key);
-    } else if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      selectAttr(key);
+      spend(tile.getAttribute("data-attr"), tile);
+    }
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!board.contains(event.target)) hideTooltip();
+  });
+
+  window.addEventListener("resize", function () {
+    if (selected) {
+      var active = board.querySelector('[data-attr="' + selected + '"]');
+      if (active) placeTooltip(active);
     }
   });
 
