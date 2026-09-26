@@ -476,7 +476,7 @@
   var MAGIC_MARKERS = { Magic: true, Grimoire: true, Rune: true, Inscription: true };
   var RANGED_MARKERS = { Bow: true, Crossbow: true, Arrow: true };
 
-  fetch("data/items.json?v=cleanup2")
+  fetch("data/items.json?v=wiki-copy1")
     .then(function (response) {
       if (!response.ok) throw new Error("missing");
       return response.json();
@@ -1472,6 +1472,9 @@
       html += "<p>Worn in " + item.slots.map(escapeHtml).join(", ") + "</p>";
     }
     if (item.description) html += "<p>" + escapeHtml(item.description) + "</p>";
+    if (item.id === "fort-blueprint" || /^Fort Blueprint$/i.test(item.name || "")) {
+      html += "<p>Given to a new character after they complete the quest 'Getting Started'.</p>";
+    }
     var labels = Object.keys(item.stats || {});
     if (labels.length) {
       html += "<table><thead><tr><th>Stat</th><th>Value</th></tr></thead><tbody>";
